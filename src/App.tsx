@@ -415,6 +415,7 @@ function App() {
       }
     }, 160)
     window.history.replaceState(null, '', `#${section}`)
+    window.scrollTo({ top: 0, behavior: 'auto' })
   }
 
   const toggleTheme = () => {
@@ -465,7 +466,7 @@ function App() {
     <div className="site-shell">
       <header className="topbar">
         <button className="brand" type="button" onClick={() => selectSection('profile')} aria-label={profile.shortName}>
-          <img className="brand-logo" src={theme === 'dark' ? '/logo-gsm-light.png' : '/logo-gsm-dark.png'} alt="" />
+          <img className="brand-logo" src={`${import.meta.env.BASE_URL}${theme === 'dark' ? 'logo-gsm-light.png' : 'logo-gsm-dark.png'}`} alt="" />
         </button>
         <nav
           className="nav-links"
@@ -556,7 +557,7 @@ function App() {
                     <ArrowDown size={17} aria-hidden="true" />
                     <span>{profile.hero.secondaryAction[locale]}</span>
                   </button>
-                  <a className="secondary-link" href="/cv.pdf" download>
+                  <a className="secondary-link" href={`${import.meta.env.BASE_URL}cv.pdf`} download>
                     <Download size={17} aria-hidden="true" />
                     <span>CV</span>
                   </a>
@@ -565,7 +566,7 @@ function App() {
 
               <aside className="identity-panel" aria-label={profile.name}>
                 <div className="portrait-frame">
-                  <img src="/profile.webp" alt={profile.name} />
+                  <img src={`${import.meta.env.BASE_URL}profile.webp`} alt={profile.name} />
                 </div>
                 <div className="identity-copy">
                   <p>{profile.name}</p>

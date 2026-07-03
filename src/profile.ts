@@ -1,5 +1,7 @@
 export type Locale = 'es' | 'en'
 
+const B = import.meta.env.BASE_URL
+
 type TextBlock = Record<Locale, string>
 type LinkedTextBlock = TextBlock & { url?: string }
 type SkillItem = {
@@ -85,7 +87,7 @@ type ProjectImage = Pick<ProjectItem, 'image' | 'imageCredit'>
 
 const projectImages = {
   aom: {
-    image: '/projects/aom-renewable-grid.jpg',
+    image: `${B}projects/aom-renewable-grid.jpg`,
     imageCredit: {
       title: 'Wind turbine energy',
       author: 'Ian / Pixabay',
@@ -94,7 +96,7 @@ const projectImages = {
     },
   },
   ems: {
-    image: '/projects/ems-control-room.jpg',
+    image: `${B}projects/ems-control-room.jpg`,
     imageCredit: {
       title: 'Power plant control room',
       author: 'Magnetic Rahim',
@@ -549,7 +551,7 @@ export const profile = {
         en: 'Burgos, Spain',
       },
       url: 'https://www.ubu.es/',
-      logo: '/logos/ubu.svg',
+      logo: `${B}logos/ubu.svg`,
       companySummary: {
         es: 'Universidad pública de Castilla y León con actividad docente, investigadora y de transferencia. Ofrece formación universitaria y programas especializados conectados con el tejido industrial y social.',
         en: 'Public university in Castilla y León with teaching, research and knowledge-transfer activity. It offers higher education and specialised programmes connected to industry and society.',
@@ -585,7 +587,7 @@ export const profile = {
         en: 'Gijón, Spain',
       },
       url: 'https://www.canonicalrobots.com/',
-      logo: '/logos/canonical-robots.png',
+      logo: `${B}logos/canonical-robots.png`,
       companySummary: {
         es: 'Empresa asturiana de robótica colaborativa orientada al diseño, fabricación y comercialización de cobots y soluciones robóticas. Trabaja en automatización industrial, visión artificial y robots de 6 grados de libertad.',
         en: 'Asturian collaborative robotics company focused on the design, manufacturing and commercialisation of cobots and robotic solutions. It works on industrial automation, computer vision and 6-axis robots.',
@@ -983,7 +985,7 @@ export const profile = {
           en: 'Validated with 10 real images and 500 synthetic images; results showed low errors, with identified systematic deviations that were easy to correct.',
         },
       ],
-      link: '/docs/tfg-procesamiento-imagenes-biometricas.pdf',
+      link: `${B}docs/tfg-procesamiento-imagenes-biometricas.pdf`,
       ...projectImages.tfg,
       visual: 'biometrics',
       tags: ['TFG', 'Computer vision', 'Canny', 'Hough Transform', 'Biometrics'],
@@ -1011,7 +1013,7 @@ export const profile = {
           en: 'Proposes good practices and a collaboration architecture integrating Teams, Jira, Bitbucket, Confluence, IBM DOORS, CI/CD flows and security measures such as 2FA, encryption and GDPR compliance.',
         },
       ],
-      link: '/docs/tfm-teletrabajo-sistemas-informacion.pdf',
+      link: `${B}docs/tfm-teletrabajo-sistemas-informacion.pdf`,
       ...projectImages.tfm,
       visual: 'project-management',
       tags: ['TFM', 'Remote work', 'Information systems', 'Survey', 'Project management'],
@@ -1027,7 +1029,7 @@ export const profile = {
       url: 'https://www.uniovi.es/estudia/masteres/ingenieriayarquitectura/proyectos',
       logos: [
         {
-          src: '/logos/uniovi.png',
+          src: `${B}logos/uniovi.png`,
           alt: 'Universidad de Oviedo',
           url: 'https://www.uniovi.es/',
         },
@@ -1060,12 +1062,12 @@ export const profile = {
       url: 'https://www.uniovi.es/',
       logos: [
         {
-          src: '/logos/uniovi.png',
+          src: `${B}logos/uniovi.png`,
           alt: 'Universidad de Oviedo',
           url: 'https://www.uniovi.es/',
         },
         {
-          src: '/logos/unibo.png',
+          src: `${B}logos/unibo.png`,
           alt: 'Università di Bologna',
           url: 'https://www.unibo.it/',
         },
@@ -1109,7 +1111,7 @@ export const profile = {
       url: 'https://amordediosoviedo.es/',
       logos: [
         {
-          src: '/logos/amor-de-dios-oviedo.png',
+          src: `${B}logos/amor-de-dios-oviedo.png`,
           alt: 'Colegio Amor de Dios Oviedo',
           url: 'https://amordediosoviedo.es/',
         },
