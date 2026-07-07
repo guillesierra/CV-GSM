@@ -2,25 +2,154 @@ import { type CSSProperties, useEffect, useLayoutEffect, useRef, useState } from
 import {
   ArrowDown,
   ArrowUpRight,
+  Atom,
+  Bot,
+  Boxes,
+  Braces,
   BriefcaseBusiness,
+  Brackets,
+  ChartNetwork,
+  ChevronDown,
+  CircuitBoard,
   Code2,
+  CodeXml,
+  Cloud,
+  Coffee,
+  Container,
   Cpu,
+  Database,
   Download,
+  Eye,
   ExternalLink,
+  FileText,
+  GitBranch,
   GraduationCap,
   Languages,
+  Layers,
   MapPin,
+  MessageCircle,
+  MonitorCog,
   Moon,
+  Network,
   PlayCircle,
+  Rocket,
+  ServerCog,
+  ShieldCheck,
+  ShipWheel,
   Sun,
+  Terminal,
+  TimerReset,
+  TowerControl,
+  TrainTrack,
+  UtilityPole,
+  Wifi,
+  Workflow,
+  Wrench,
 } from 'lucide-react'
 import QRCode from 'qrcode'
 import './App.css'
-import { type Locale, type ProjectItem, type ProjectVisualKind, type SectionId, profile } from './profile'
+import { type ExperienceItem, type Locale, type ProjectItem, type ProjectVisualKind, type SectionId, profile } from './profile'
 
 const sectionIds: SectionId[] = ['profile', 'experience', 'skills', 'projects', 'education', 'contact']
+const eagerPreviewVideo = (profile.professionalProjects as ProjectItem[]).find((project) => project.previewVideo)?.previewVideo
 
 type Theme = 'light' | 'dark'
+type ProjectCategory = 'professional' | 'personal' | 'academic'
+type TimelineDate = {
+  month: string
+  year: string
+}
+type TimelineYears = {
+  start: TimelineDate | null
+  end: TimelineDate | null
+}
+
+const skillIconMap: Record<string, typeof Cpu> = {
+  'C++': Braces,
+  Python: Terminal,
+  Go: Rocket,
+  JavaScript: Brackets,
+  Java: Coffee,
+  'gRPC / REST APIs': Network,
+  Protobuf: Boxes,
+  'Vue.js / Vuex': Code2,
+  'HTML5 / CSS3': CodeXml,
+  React: Atom,
+  'Industrial HMIs': MonitorCog,
+  'Visual stability': Eye,
+  'Data traceability': Database,
+  Docker: Container,
+  Kubernetes: ShipWheel,
+  AWS: Cloud,
+  'Linux / Bash': Terminal,
+  Git: GitBranch,
+  'CI/CD': Workflow,
+  DevOps: ServerCog,
+  'AGV / AMR': Bot,
+  ROS: CircuitBoard,
+  'PLC / CODESYS': Cpu,
+  'Yaskawa robots': Wrench,
+  'Digital twins': Layers,
+  'Industrial IoT': Wifi,
+  'Real-time systems': TimerReset,
+  'Smart grids': UtilityPole,
+  'EMS / DERMS / AOM': ChartNetwork,
+  'Air Traffic Management': TowerControl,
+  'Railway signalling': TrainTrack,
+  'Industrial cybersecurity': ShieldCheck,
+  Spanish: Languages,
+  English: MessageCircle,
+  Italian: Languages,
+}
+
+function parseTimelineDate(value: string | undefined, fallbackYear?: string): TimelineDate | null {
+  const trimmedValue = value?.trim()
+  if (!trimmedValue) return null
+
+  const dateParts = trimmedValue.match(/^(.*?)\s*(\d{4})$/)
+  if (dateParts) {
+    return {
+      month: dateParts[1].trim(),
+      year: dateParts[2],
+    }
+  }
+
+  if (fallbackYear) {
+    return {
+      month: trimmedValue,
+      year: fallbackYear,
+    }
+  }
+
+  return null
+}
+
+function getTimelineYears(item: ExperienceItem, locale: Locale): TimelineYears {
+  const periodParts = item.period[locale].split(/\s+-\s+/)
+  const isCurrent = /actualidad/i.test(item.period.es) || /present/i.test(item.period.en)
+  const isConnectivityEngineer = item.role.es.includes('conectividad')
+  const isResearchEngineer = item.role.es.includes('desarrollo') && item.role.es.includes('investigaci')
+  const currentYear = '2026'
+
+  return {
+    start: isConnectivityEngineer ? null : parseTimelineDate(periodParts[0]),
+    end: isResearchEngineer ? null : parseTimelineDate(periodParts[1], isCurrent ? currentYear : undefined),
+  }
+}
+
+function getExperienceDisplayItems(items: ExperienceItem[]) {
+  const professorIndex = items.findIndex((item) => item.role.es === 'Profesor asociado')
+  const researchIndex = items.findIndex((item) => item.role.es === 'Ingeniero de desarrollo e investigación')
+
+  if (professorIndex === -1 || researchIndex === -1 || professorIndex < researchIndex) {
+    return items
+  }
+
+  const orderedItems = [...items]
+  const [professorItem] = orderedItems.splice(professorIndex, 1)
+  orderedItems.splice(researchIndex, 0, professorItem)
+  return orderedItems
+}
 
 const projectVisuals: Record<ProjectVisualKind, { accent: string; label: string; tone: string }> = {
   'energy-grid': { accent: 'var(--accent)', label: 'AOM', tone: 'var(--muted)' },
@@ -179,6 +308,7 @@ function ProjectVisual({ kind }: { kind: ProjectVisualKind }) {
 
 function ProjectImage({ locale, project }: { locale: Locale; project: ProjectItem }) {
   const [failed, setFailed] = useState(false)
+  const creditLabel = `${project.imageCredit.title}. ${project.imageCredit.author}. ${project.imageCredit.license}`
 
   if (project.previewVideo) {
     return (
@@ -191,10 +321,11 @@ function ProjectImage({ locale, project }: { locale: Locale; project: ProjectIte
             muted
             loop
             playsInline
+            preload="auto"
             onError={() => setFailed(true)}
           />
         </a>
-        <a className="image-credit" href={project.imageCredit.sourceUrl} target="_blank" rel="noreferrer">
+        <a className="image-credit" href={project.imageCredit.sourceUrl} target="_blank" rel="noreferrer" aria-label={creditLabel} title={creditLabel}>
           {project.imageCredit.license} · {project.imageCredit.author}
         </a>
       </div>
@@ -215,7 +346,7 @@ function ProjectImage({ locale, project }: { locale: Locale; project: ProjectIte
           />
         )}
       </a>
-      <a className="image-credit" href={project.imageCredit.sourceUrl} target="_blank" rel="noreferrer">
+      <a className="image-credit" href={project.imageCredit.sourceUrl} target="_blank" rel="noreferrer" aria-label={creditLabel} title={creditLabel}>
         {project.imageCredit.license} · {project.imageCredit.author}
       </a>
     </div>
@@ -244,6 +375,10 @@ function App() {
   const [navSquishing, setNavSquishing] = useState(false)
   const [showQR, setShowQR] = useState(false)
   const [qrDataUrl, setQrDataUrl] = useState('')
+  const [expandedMobileSections, setExpandedMobileSections] = useState<Record<string, boolean>>({})
+  const [activeProjectCategory, setActiveProjectCategory] = useState<ProjectCategory>('professional')
+  const [showAllCerts, setShowAllCerts] = useState(false)
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({})
   const navRef = useRef<HTMLElement | null>(null)
   const tabRefs = useRef(new Map<SectionId, HTMLButtonElement>())
   const terminalInputRef = useRef<HTMLInputElement | null>(null)
@@ -286,6 +421,18 @@ function App() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [activeSection])
+
+  useEffect(() => {
+    if (!eagerPreviewVideo) return
+
+    const preloadLink = document.createElement('link')
+    preloadLink.rel = 'preload'
+    preloadLink.as = 'video'
+    preloadLink.href = eagerPreviewVideo
+    document.head.appendChild(preloadLink)
+
+    return () => preloadLink.remove()
+  }, [])
 
   useEffect(() => {
     if (terminalPhase !== 'typing' || !terminalStarted) return
@@ -422,10 +569,55 @@ function App() {
     setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'))
   }
 
-  const renderProjectGrid = (projects: ProjectItem[]) => (
-    <div className="project-grid">
+  const toggleMobileSection = (section: string) => {
+    setExpandedMobileSections((current) => ({
+      ...current,
+      [section]: !current[section],
+    }))
+  }
+
+  const mobileMoreLabel = (expanded: boolean) => (
+    expanded
+      ? (locale === 'es' ? 'Ver menos' : 'Show less')
+      : (locale === 'es' ? 'Ver más' : 'Show more')
+  )
+
+  const renderMobileMoreButton = (section: string) => (
+    <button className="mobile-more-button" type="button" onClick={() => toggleMobileSection(section)}>
+      <span>{mobileMoreLabel(Boolean(expandedMobileSections[section]))}</span>
+      <ArrowDown size={16} aria-hidden="true" />
+    </button>
+  )
+
+  const isAcademicProject = (project: ProjectItem) => project.tags.some((tag) => tag === 'TFG' || tag === 'TFM')
+  const academicProjects = profile.personalProjects.filter(isAcademicProject)
+  const personalProjects = profile.personalProjects.filter((project) => !isAcademicProject(project))
+  const professionalProjects: ProjectItem[] = profile.professionalProjects
+  const featuredProjectVisuals: ProjectVisualKind[] = ['energy-grid', 'air-traffic', 'mobile-robot']
+  const featuredProjects = featuredProjectVisuals
+    .map((visual) => professionalProjects.find((project) => project.visual === visual))
+    .filter((project): project is ProjectItem => Boolean(project))
+  const filteredProjects = {
+    professional: professionalProjects,
+    personal: personalProjects,
+    academic: academicProjects,
+  } satisfies Record<ProjectCategory, ProjectItem[]>
+  const projectCategoryLabels = {
+    professional: { es: 'Profesionales', en: 'Professional' },
+    personal: { es: 'Personales', en: 'Personal' },
+    academic: { es: 'Académicos', en: 'Academic' },
+  } satisfies Record<ProjectCategory, Record<Locale, string>>
+
+  const renderProjectGrid = (projects: ProjectItem[], section: string, featured = false) => (
+    <div
+      className={[
+        'project-grid',
+        featured ? 'featured-project-grid' : '',
+        expandedMobileSections[section] ? 'mobile-collapsible is-expanded' : 'mobile-collapsible',
+      ].filter(Boolean).join(' ')}
+    >
       {projects.map((project) => (
-        <article className="project-card" key={project.title[locale]}>
+        <article className={featured ? 'project-card project-card--featured' : 'project-card'} key={project.title[locale]}>
           <ProjectImage locale={locale} project={project} />
           <div className="project-content">
             <div>
@@ -536,11 +728,19 @@ function App() {
             id="panel-profile"
             role="tabpanel"
           >
+            <span className="profile-agv-runner" aria-hidden="true">
+              <img src={`${import.meta.env.BASE_URL}agv-runner.png`} alt="" />
+            </span>
             <div className="hero-section">
               <div className="hero-copy">
-                <p className="eyebrow">{profile.hero.eyebrow[locale]}</p>
                 <h1 id="hero-title">{profile.hero.title[locale]}</h1>
-                <p className="role-line">{profile.hero.role[locale]}</p>
+                <p className="role-line">
+                  {profile.hero.role[locale].split('\n').map((line, index) => (
+                    <span className={`role-line-part role-line-part--${index + 1}`} key={line}>
+                      {line}
+                    </span>
+                  ))}
+                </p>
                 <p className="hero-summary">{profile.hero.summary[locale]}</p>
                 <div className="hero-actions">
                   <a className="primary-link" href={profile.links.linkedin} target="_blank" rel="noreferrer">
@@ -557,10 +757,6 @@ function App() {
                     <ArrowDown size={17} aria-hidden="true" />
                     <span>{profile.hero.secondaryAction[locale]}</span>
                   </button>
-                  <a className="secondary-link" href={`${import.meta.env.BASE_URL}cv.pdf`} download>
-                    <Download size={17} aria-hidden="true" />
-                    <span>CV</span>
-                  </a>
                 </div>
               </div>
 
@@ -577,15 +773,6 @@ function App() {
                 </div>
               </aside>
             </div>
-
-            <section className="fact-strip" aria-label="Professional facts">
-              {profile.facts.map((fact) => (
-                <div className="fact-item" key={fact.label[locale]}>
-                  <span>{fact.label[locale]}</span>
-                  <strong>{fact.value[locale]}</strong>
-                </div>
-              ))}
-            </section>
 
             <section className="terminal-window" aria-label="Terminal profile summary" ref={terminalRef}>
               <div className="terminal-titlebar">
@@ -662,50 +849,83 @@ function App() {
               <BriefcaseBusiness size={20} aria-hidden="true" />
               <h2>{profile.labels.experience[locale]}</h2>
             </div>
-            <div className="timeline">
-              {profile.experience.map((item) => (
-                <article className="experience-card" key={`${item.company}-${item.period.es}`}>
-                  <div className="experience-header">
-                    <a className="company-logo" href={item.url} target="_blank" rel="noreferrer">
-                      <img src={item.logo} alt={`${item.company} logo`} loading="lazy" />
-                    </a>
-                    <div>
-                      <div className="card-kicker">
-                        <span>{item.period[locale]}</span>
-                        {item.place ? <span>{item.place[locale]}</span> : null}
-                      </div>
-                      <h3>{item.role[locale]}</h3>
-                      <a className="company" href={item.url} target="_blank" rel="noreferrer">
-                        {item.company}
-                        <ArrowUpRight size={14} aria-hidden="true" />
+            <div className={expandedMobileSections.experience ? 'timeline experience-timeline mobile-collapsible is-expanded' : 'timeline experience-timeline mobile-collapsible'}>
+              {getExperienceDisplayItems(profile.experience).map((item) => {
+                const timelineYears = getTimelineYears(item, locale)
+
+                return (
+                  <div className="experience-row" key={`${item.company}-${item.period.es}`}>
+                    <article className="experience-card">
+                    <div className="experience-header">
+                      <a className="company-logo" href={item.url} target="_blank" rel="noreferrer">
+                        <img src={item.logo} alt={`${item.company} logo`} loading="lazy" />
                       </a>
-                      <p className="company-summary">{item.companySummary[locale]}</p>
+                      <div>
+                        <div className="card-kicker">
+                          <span>{item.period[locale]}</span>
+                          {item.place ? <span>{item.place[locale]}</span> : null}
+                        </div>
+                        <h3>{item.role[locale]}</h3>
+                        <a className="company" href={item.url} target="_blank" rel="noreferrer">
+                          {item.company}
+                          <ArrowUpRight size={14} aria-hidden="true" />
+                        </a>
+                        <p className="company-summary">{item.companySummary[locale]}</p>
+                      </div>
+                    </div>
+                    {item.stack ? (
+                      <div className="experience-stack" aria-label="Technology stack">
+                        {item.stack.map((technology) => (
+                          <span key={technology}>{technology}</span>
+                        ))}
+                      </div>
+                    ) : null}
+                    <div className="xyz-grid">
+                      <div className="xyz-item">
+                        <span>{profile.labels.achievement[locale]}</span>
+                        {item.xyz.achievement.map((point, i) => (
+                          <p key={`ach-${i}`}>{point[locale]}</p>
+                        ))}
+                      </div>
+                      <div className="xyz-item">
+                        <span>{profile.labels.measuredBy[locale]}</span>
+                        {item.xyz.measuredBy.map((point, i) => (
+                          <p key={`met-${i}`}>{point[locale]}</p>
+                        ))}
+                      </div>
+                      <div className="xyz-item">
+                        <span>{profile.labels.execution[locale]}</span>
+                        {item.xyz.execution.map((point, i) => (
+                          <p key={`exe-${i}`}>{point[locale]}</p>
+                        ))}
+                      </div>
+                    </div>
+                    </article>
+                    <div className="timeline-year-marker" aria-hidden="true">
+                      {timelineYears.end ? (
+                        <span className="timeline-endpoint timeline-endpoint--end">
+                          <span className="timeline-date-label">
+                            <span className="timeline-month">{timelineYears.end.month}</span>
+                            <span className="timeline-year timeline-year--end">{timelineYears.end.year}</span>
+                          </span>
+                          <span className="timeline-dot" />
+                        </span>
+                      ) : null}
+                      {timelineYears.start ? (
+                        <span className="timeline-endpoint timeline-endpoint--start">
+                          <span className="timeline-date-label">
+                            <span className="timeline-month">{timelineYears.start.month}</span>
+                            <span className="timeline-year timeline-year--start">{timelineYears.start.year}</span>
+                          </span>
+                          <span className="timeline-dot" />
+                        </span>
+                      ) : null}
                     </div>
                   </div>
-                  {item.stack ? (
-                    <div className="experience-stack" aria-label="Technology stack">
-                      {item.stack.map((technology) => (
-                        <span key={technology}>{technology}</span>
-                      ))}
-                    </div>
-                  ) : null}
-                  <div className="xyz-grid">
-                    <div className="xyz-item">
-                      <span>{profile.labels.achievement[locale]}</span>
-                      <p>{item.xyz.achievement[locale]}</p>
-                    </div>
-                    <div className="xyz-item">
-                      <span>{profile.labels.measuredBy[locale]}</span>
-                      <p>{item.xyz.measuredBy[locale]}</p>
-                    </div>
-                    <div className="xyz-item">
-                      <span>{profile.labels.execution[locale]}</span>
-                      <p>{item.xyz.execution[locale]}</p>
-                    </div>
-                  </div>
-                </article>
-              ))}
+                )
+              })}
             </div>
+            {renderMobileMoreButton('experience')}
           </section>
         ) : null}
 
@@ -725,10 +945,14 @@ function App() {
                     {group.skills.map((skill) => {
                       const idx = skillIdx++
                       const duration = 550 + (idx % 5) * 170 + (skill.level / 100) * 350
+                      const SkillIcon = skillIconMap[skill.name.en] ?? Cpu
                       return (
                       <div className="skill-meter" key={skill.name[locale]}>
                         <div className="skill-meter-head">
-                          <span>{skill.name[locale]}</span>
+                          <span className="skill-name">
+                            <SkillIcon size={15} aria-hidden="true" />
+                            <span>{skill.name[locale]}</span>
+                          </span>
                           <strong>{skillsAnimated ? `${skill.level}%` : '0%'}</strong>
                         </div>
                         <div className="skill-bar" aria-hidden="true">
@@ -758,17 +982,32 @@ function App() {
             </div>
             <div className="project-section">
               <div className="project-section-heading">
-                <p className="eyebrow">{locale === 'es' ? 'Impacto industrial' : 'Industrial impact'}</p>
-                <h3>{locale === 'es' ? 'Proyectos profesionales' : 'Professional projects'}</h3>
+                <p className="eyebrow">{locale === 'es' ? 'Selección destacada' : 'Featured selection'}</p>
+                <h3>{locale === 'es' ? 'Proyectos destacados' : 'Featured projects'}</h3>
               </div>
-              {renderProjectGrid(profile.professionalProjects)}
+              {renderProjectGrid(featuredProjects, 'featured-projects', true)}
             </div>
             <div className="project-section">
               <div className="project-section-heading">
-                <p className="eyebrow">{locale === 'es' ? 'Laboratorio personal' : 'Personal lab'}</p>
-                <h3>{locale === 'es' ? 'Proyectos personales' : 'Personal projects'}</h3>
+                <p className="eyebrow">{locale === 'es' ? 'Archivo filtrable' : 'Filterable archive'}</p>
+                <h3>{locale === 'es' ? 'Resto de proyectos' : 'More projects'}</h3>
               </div>
-              {renderProjectGrid(profile.personalProjects)}
+              <div className="project-filter" role="tablist" aria-label={locale === 'es' ? 'Filtrar proyectos' : 'Filter projects'}>
+                {(['professional', 'personal', 'academic'] as ProjectCategory[]).map((category) => (
+                  <button
+                    aria-selected={activeProjectCategory === category}
+                    className="project-filter-button"
+                    key={category}
+                    onClick={() => setActiveProjectCategory(category)}
+                    role="tab"
+                    type="button"
+                  >
+                    {projectCategoryLabels[category][locale]}
+                  </button>
+                ))}
+              </div>
+              {renderProjectGrid(filteredProjects[activeProjectCategory], `project-${activeProjectCategory}`)}
+              {renderMobileMoreButton(`project-${activeProjectCategory}`)}
             </div>
           </section>
         ) : null}
@@ -815,6 +1054,7 @@ function App() {
                         <li key={detail[locale]}>
                           {detail.url ? (
                             <a href={detail.url} target="_blank" rel="noreferrer">
+                              {detail.url.endsWith('.pdf') ? <FileText size={14} aria-hidden="true" /> : null}
                               {detail[locale]}
                               <ArrowUpRight size={14} aria-hidden="true" />
                             </a>
@@ -833,45 +1073,151 @@ function App() {
                 <GraduationCap size={20} aria-hidden="true" />
                 <h2>{profile.labels.certifications[locale]}</h2>
               </div>
-              <ul className="certification-list">
-                {profile.certifications.map((certification) => (
-                  <li className={certification.featured ? 'certification-item featured' : 'certification-item'} key={`${certification.title}-${certification.period.es}`}>
-                    <img src={certification.icon} alt="" loading="lazy" />
-                    <div className="certification-copy">
-                      {certification.url ? (
-                        <a className="certification-title" href={certification.url} target="_blank" rel="noreferrer">
-                          {certification.title}
-                          <ArrowUpRight size={14} aria-hidden="true" />
-                        </a>
-                      ) : (
-                        <span className="certification-title">{certification.title}</span>
-                      )}
-                      <span className="certification-meta">
-                        {certification.issuer} · {certification.period[locale]}
-                      </span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+
+              {(() => {
+                const certs = showAllCerts ? profile.certifications : profile.certifications.filter((c) => c.featured)
+                const groups = certs.reduce((acc, cert) => {
+                  const key = cert.issuer
+                  if (!acc[key]) acc[key] = []
+                  acc[key].push(cert)
+                  return acc
+                }, {} as Record<string, typeof certs>)
+
+                return (
+                  <>
+                    <ul className="certification-list">
+                      {Object.entries(groups).map(([issuer, items]) => {
+                        const collapsed = collapsedGroups[issuer]
+                        return (
+                        <li className="cert-group" key={issuer}>
+                          <button
+                            className="cert-group-label"
+                            type="button"
+                            onClick={() => setCollapsedGroups((prev) => ({ ...prev, [issuer]: !prev[issuer] }))}
+                            aria-expanded={!collapsed}
+                          >
+                            <ChevronDown
+                              size={12}
+                              aria-hidden="true"
+                              style={{ transform: collapsed ? 'rotate(-90deg)' : 'rotate(0deg)', transition: 'transform 200ms ease' }}
+                            />
+                            <span>{issuer}</span>
+                            <span className="cert-group-count">{items.length}</span>
+                          </button>
+                          {!collapsed ? (
+                            <ul className="cert-group-list">
+                              {items.map((certification) => (
+                                <li className={certification.featured ? 'certification-item featured' : 'certification-item'} key={`${certification.title}-${certification.period.es}`}>
+                                  <img src={certification.icon} alt="" loading="lazy" />
+                                  <div className="certification-copy">
+                                    {certification.url ? (
+                                      <a className="certification-title" href={certification.url} target="_blank" rel="noreferrer">
+                                        {certification.title}
+                                        <ArrowUpRight size={14} aria-hidden="true" />
+                                      </a>
+                                    ) : (
+                                      <span className="certification-title">{certification.title}</span>
+                                    )}
+                                    <span className="certification-meta">
+                                      {certification.issuer} · {certification.period[locale]}
+                                    </span>
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          ) : null}
+                        </li>
+                        )
+                      })}
+                    </ul>
+
+                    {!showAllCerts && profile.certifications.some((c) => !c.featured) ? (
+                      <button className="cert-show-all" type="button" onClick={() => setShowAllCerts(true)}>
+                        <ChevronDown size={16} aria-hidden="true" />
+                        <span>{locale === 'es' ? 'Ver todas' : 'Show all'} ({profile.certifications.length})</span>
+                      </button>
+                    ) : null}
+                    {showAllCerts ? (
+                      <button className="cert-show-all" type="button" onClick={() => setShowAllCerts(false)}>
+                        <ChevronDown size={16} aria-hidden="true" style={{ transform: 'rotate(180deg)' }} />
+                        <span>{locale === 'es' ? 'Solo destacadas' : 'Featured only'}</span>
+                      </button>
+                    ) : null}
+                  </>
+                )
+              })()}
             </div>
           </section>
         ) : null}
 
         {activeSection === 'contact' ? (
-          <section aria-labelledby="tab-contact" className="panel-shell contact-section" id="panel-contact" role="tabpanel">
-            <h2>{profile.contact.title[locale]}</h2>
-            <p>{profile.contact.text[locale]}</p>
-            <div className="contact-actions">
-              <a className="primary-link contact-link" href={profile.links.linkedin} target="_blank" rel="noreferrer">
-                <ExternalLink size={18} aria-hidden="true" />
-                <span>{profile.contact.action[locale]}</span>
-                <ArrowUpRight size={16} aria-hidden="true" />
-              </a>
-              <a className="contact-alt-link" href={profile.links.github} target="_blank" rel="noreferrer">
-                <Code2 size={18} aria-hidden="true" />
-                <span>{profile.contact.githubAction[locale]}</span>
-                <ArrowUpRight size={16} aria-hidden="true" />
-              </a>
+          <section aria-labelledby="tab-contact" className="panel-shell contact-panel" id="panel-contact" role="tabpanel">
+            <div className="contact-atm-backdrop" aria-hidden="true">
+              <svg className="contact-atm-map" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid slice">
+                <rect className="atm-sea" x="0" y="-180" width="1200" height="900" />
+                <path className="atm-neighbour" d="M0 386 L76 376 L116 390 L160 382 L202 414 L252 400 L306 426 L362 402 L420 418 L474 392 L532 405 L588 378 L646 390 L698 366 L748 376 L800 358 L858 363 L908 342 L960 350 L1002 332 L1054 336 L1088 318 L1126 324 L1200 340 L1200 720 L0 720 Z" />
+                <path className="atm-region" d="M64 246 L96 236 L132 241 L162 229 L199 232 L235 225 L270 230 L312 219 L352 228 L392 220 L432 225 L470 216 L512 224 L548 215 L588 225 L626 219 L664 229 L706 225 L748 235 L790 235 L832 246 L876 247 L916 258 L960 258 L1002 270 L1048 268 L1086 282 L1134 286 L1160 308 L1126 324 L1088 318 L1054 336 L1002 332 L960 350 L908 342 L858 363 L800 358 L748 376 L698 366 L646 390 L588 378 L532 405 L474 392 L420 418 L362 402 L306 426 L252 400 L202 414 L160 382 L116 390 L88 350 L106 314 L76 284 Z" />
+                <path className="atm-coast" d="M64 246 L96 236 L132 241 L162 229 L199 232 L235 225 L270 230 L312 219 L352 228 L392 220 L432 225 L470 216 L512 224 L548 215 L588 225 L626 219 L664 229 L706 225 L748 235 L790 235 L832 246 L876 247 L916 258 L960 258 L1002 270 L1048 268 L1086 282 L1134 286 L1160 308" />
+                <path className="atm-boundary" d="M88 350 L106 314 L76 284 L64 246" />
+                <path className="atm-boundary" d="M1126 324 L1160 308 L1134 286" />
+                <path className="atm-terrain" d="M138 362 C252 326 354 348 462 318 S662 300 786 334 S978 370 1118 320" />
+                <path className="atm-terrain" d="M178 314 C300 286 420 306 548 286 S780 280 944 318" />
+                <path className="atm-terrain" d="M218 408 C346 390 478 408 610 380 S832 354 1048 398" />
+                <path className="atm-route" d="M108 590 L318 418 L558 294 L828 238 L1084 184" />
+                <path className="atm-route atm-route--secondary" d="M184 238 L398 344 L640 356 L924 284" />
+                <path className="atm-route atm-route--secondary" d="M220 610 L470 466 L702 362 L1010 492" />
+                <path className="atm-sector" d="M294 178 L438 224 L392 382 L248 336 Z" />
+                <path className="atm-sector atm-sector--wide" d="M640 198 L818 252 L778 456 L590 392 Z" />
+                <path className="atm-sector atm-sector--soft" d="M872 328 L1078 354 L1030 540 L850 508 Z" />
+                <circle className="atm-ring" cx="562" cy="352" r="128" />
+                <circle className="atm-ring atm-ring--small" cx="858" cy="282" r="82" />
+
+                <g className="atm-city atm-city--oviedo">
+                  <circle cx="578" cy="314" r="6" />
+                  <text x="592" y="318">Oviedo</text>
+                </g>
+                <g className="atm-city atm-city--gijon">
+                  <circle cx="656" cy="242" r="6" />
+                  <text x="670" y="246">Gijón</text>
+                </g>
+                <g className="atm-city atm-city--aviles">
+                  <circle cx="510" cy="238" r="6" />
+                  <text x="524" y="242">Avilés</text>
+                </g>
+
+                <g className="atm-plane atm-plane--one">
+                  <text className="atm-plane-symbol" x="-13" y="10">&#9992;</text>
+                  <text x="28" y="-8">IBE4026</text>
+                </g>
+                <g className="atm-plane atm-plane--two">
+                  <text className="atm-plane-symbol" x="-13" y="10">&#9992;</text>
+                  <text x="28" y="-8">RYR2931</text>
+                </g>
+                <g className="atm-plane atm-plane--three">
+                  <text className="atm-plane-symbol" x="-13" y="10">&#9992;</text>
+                  <text x="28" y="-8">AEA095</text>
+                </g>
+              </svg>
+            </div>
+            <div className="contact-section">
+              <h2>{profile.contact.title[locale]}</h2>
+              <p>{profile.contact.text[locale]}</p>
+              <div className="contact-actions">
+                <a className="primary-link contact-link" href={profile.links.linkedin} target="_blank" rel="noreferrer">
+                  <ExternalLink size={18} aria-hidden="true" />
+                  <span>{profile.contact.action[locale]}</span>
+                  <ArrowUpRight size={16} aria-hidden="true" />
+                </a>
+                <a className="contact-alt-link" href={profile.links.github} target="_blank" rel="noreferrer">
+                  <Code2 size={18} aria-hidden="true" />
+                  <span>{profile.contact.githubAction[locale]}</span>
+                  <ArrowUpRight size={16} aria-hidden="true" />
+                </a>
+                <a className="contact-alt-link" href={`${import.meta.env.BASE_URL}cv.pdf`} download>
+                  <Download size={18} aria-hidden="true" />
+                  <span>{locale === 'es' ? 'Descargar CV' : 'Download CV'}</span>
+                </a>
+              </div>
             </div>
           </section>
         ) : null}

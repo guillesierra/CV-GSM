@@ -45,9 +45,9 @@ export type ExperienceItem = {
   companySummary: TextBlock
   stack?: string[]
   xyz: {
-    achievement: TextBlock
-    measuredBy: TextBlock
-    execution: TextBlock
+    achievement: TextBlock[]
+    measuredBy: TextBlock[]
+    execution: TextBlock[]
   }
 }
 
@@ -272,8 +272,8 @@ export const profile = {
       en: 'I build robust industrial systems between software, hardware and operations.',
     },
     role: {
-      es: 'Industrial Electronics & Automation Engineer | Robotics · Critical Systems · Full-Stack Development · Real-Time Systems',
-      en: 'Industrial Electronics & Automation Engineer | Robotics · Critical Systems · Full-Stack Development · Real-Time Systems',
+      es: 'Robotics · Critical Systems · Full-Stack Development · Real-Time Systems\nGrado en Ingeniería Electrónica Industrial y Automática\nMáster en Dirección de Proyectos',
+      en: 'Robotics · Critical Systems · Full-Stack Development · Real-Time Systems\nBachelor of Industrial Electronics and Automatic Engineering\nMaster in Project Management',
     },
     summary: {
       es: 'Más de seis años desarrollando soluciones software y hardware para robótica móvil, automatización industrial, sistemas embebidos, energía, ferroviario y gestión de tráfico aéreo.',
@@ -359,20 +359,46 @@ export const profile = {
         'AWS',
         'Docker',
         'Kubernetes',
+        'ICCP',
+        'SCADA',
       ],
       xyz: {
-        achievement: {
+        achievement: [{
           es: 'Mejoré la operación avanzada de red en soluciones de control y operación en tiempo real para el sector energético y smart grids.',
           en: 'Improved advanced grid operation in real-time control and operation solutions for the energy and smart grid sector.',
-        },
-        measuredBy: {
-          es: 'Medido por módulos software entregados en plataformas energéticas, HMIs operativas, integración backend con servicios distribuidos, APIs y comunicaciones en tiempo real. Métricas exactas de usuarios, activos y disponibilidad pendientes de concretar.',
-          en: 'Measured through delivered software modules in energy platforms, operational HMIs, backend integration with distributed services, APIs and real-time communications. Exact user, asset and availability metrics still to be confirmed.',
-        },
-        execution: {
-          es: 'Desarrollé y mantuve módulos para plataformas de operación energética, diseñé HMIs orientadas a estabilidad visual y trazabilidad del dato, trabajé con telemetría, señales, alarmas y datos temporales, e integré persistencia, mensajería, almacenamiento y despliegue cloud.',
-          en: 'Developed and maintained modules for energy operation platforms, designed HMIs focused on visual stability and data traceability, worked with telemetry, signals, alarms and time-series data, and integrated persistence, messaging, storage and cloud deployment.',
-        },
+        }, {
+          es: 'Reforcé la disponibilidad operativa de plataformas energéticas críticas mediante mantenimiento, integración y soporte 24/7.',
+          en: 'Strengthened the operational availability of critical energy platforms through maintenance, integration and 24/7 support.',
+        }],
+        measuredBy: [{
+          es: '8 módulos software (DERMS, AGC, Smart Planner, Forecast, Hosting Capacity, iPA Master, TimeSeriesFixerMock) mantenidos y desarrollados en las plataformas Onesait Grid.',
+          en: '8 software modules (DERMS, AGC, Smart Planner, Forecast, Hosting Capacity, iPA Master, TimeSeriesFixerMock) maintained and developed on the Onesait Grid platform.',
+        }, {
+          es: 'Desplegado en clientes como Repsol, Naturgy y UCSD.',
+          en: 'Deployed at clients including Repsol, Naturgy and UCSD.',
+        }, {
+          es: 'Gestión de toda la red de alta y media tensión de Naturgy (Madrid, Galicia, etc.) con disponibilidad 24/7.',
+          en: 'Management of Naturgy\'s entire high and medium voltage grid (Madrid, Galicia, etc.) with 24/7 availability.',
+        }, {
+          es: 'En Babel, gateway SCADA crítico para parques eólicos con guardias 24/7.',
+          en: 'In Babel, a critical SCADA gateway for wind farms with 24/7 on-call shifts.',
+        }],
+        execution: [{
+          es: 'Desarrollé y mantuve módulos para plataformas de operación energética (DERMS, AGC, Forecast, Hosting Capacity, Smart Planner).',
+          en: 'Developed and maintained modules for energy operation platforms (DERMS, AGC, Forecast, Hosting Capacity, Smart Planner).',
+        }, {
+          es: 'Diseñé HMIs orientadas a estabilidad visual y trazabilidad del dato, trabajando con telemetría, señales, alarmas y datos temporales.',
+          en: 'Designed HMIs focused on visual stability and data traceability, working with telemetry, signals, alarms and time-series data.',
+        }, {
+          es: 'Integré persistencia, mensajería, almacenamiento y despliegue cloud en las plataformas.',
+          en: 'Integrated persistence, messaging, storage and cloud deployment in the platforms.',
+        }, {
+          es: 'En el equipo de Babel, mantengo una pasarela/middleware SCADA para comunicaciones industriales del sector eléctrico mediante ICCP y otros protocolos.',
+          en: 'In the Babel team, I maintain a SCADA middleware/gateway for industrial communications in the electrical sector via ICCP and other protocols.',
+        }, {
+          es: 'Formo parte del grupo de retén con guardias 24/7 garantizando la disponibilidad del sistema.',
+          en: 'I am part of the on-call team with 24/7 shifts ensuring system availability.',
+        }],
       },
     },
     {
@@ -397,18 +423,30 @@ export const profile = {
       },
       stack: ['C', 'C++', 'Embedded Software', 'gTest', 'Git', 'Linux', 'Railway Signalling', 'Critical Systems'],
       xyz: {
-        achievement: {
+        achievement: [{
           es: 'Aumenté la fiabilidad y mantenibilidad de software crítico para sistemas de señalización ferroviaria.',
           en: 'Increased the reliability and maintainability of critical software for railway signalling systems.',
-        },
-        measuredBy: {
-          es: 'Medido por componentes C/C++ validados, pruebas unitarias automatizadas con gTest y detección temprana de errores en un entorno regulado y de alta exigencia.',
-          en: 'Measured through validated C/C++ components, automated gTest unit tests and earlier error detection in a regulated, high-demand environment.',
-        },
-        execution: {
-          es: 'Desarrollé y mantuve componentes software para sistemas ferroviarios, implementé lógica backend en C/C++, ejecuté pruebas automatizadas y colaboré con equipos técnicos en validación de software embebido.',
-          en: 'Developed and maintained software components for railway systems, implemented backend logic in C/C++, ran automated tests and collaborated with technical teams on embedded software validation.',
-        },
+        }, {
+          es: 'Facilité la detección temprana de errores mediante validación automatizada de componentes embebidos.',
+          en: 'Enabled earlier error detection through automated validation of embedded components.',
+        }],
+        measuredBy: [{
+          es: 'Componentes C/C++ validados con pruebas unitarias automatizadas mediante gTest.',
+          en: 'Validated C/C++ components with automated unit tests using gTest.',
+        }, {
+          es: 'Detección temprana de errores en un entorno regulado y de alta exigencia.',
+          en: 'Earlier error detection in a regulated, high-demand environment.',
+        }],
+        execution: [{
+          es: 'Desarrollé y mantuve componentes software para sistemas ferroviarios.',
+          en: 'Developed and maintained software components for railway systems.',
+        }, {
+          es: 'Implementé lógica backend en C/C++ y ejecuté pruebas automatizadas.',
+          en: 'Implemented backend logic in C/C++ and ran automated tests.',
+        }, {
+          es: 'Colaboré con equipos técnicos en validación de software embebido.',
+          en: 'Collaborated with technical teams on embedded software validation.',
+        }],
       },
     },
     {
@@ -433,18 +471,33 @@ export const profile = {
       },
       stack: ['Ada 95', 'C++', 'Java 11', 'REST APIs', 'gRPC', 'AMQP', 'cURL', 'Docker', 'Bash', 'Unix/Linux', 'ATM'],
       xyz: {
-        achievement: {
+        achievement: [{
           es: 'Contribuí a la modernización de sistemas operacionales de gestión de red para Air Traffic Management.',
           en: 'Contributed to the modernisation of operational network management systems for Air Traffic Management.',
-        },
-        measuredBy: {
-          es: 'Medido por componentes backend desarrollados para el futuro integrated Network Manager de EUROCONTROL, integraciones con APIs, servicios distribuidos y mensajería. Métricas de módulos, entregas o incidencias pendientes de concretar.',
-          en: 'Measured through backend components developed for EUROCONTROL future integrated Network Manager, integrations with APIs, distributed services and messaging. Module, delivery or incident metrics still to be confirmed.',
-        },
-        execution: {
-          es: 'Implementé lógica de negocio en lenguajes orientados a sistemas críticos, trabajé en Unix/Linux con herramientas de desarrollo y automatización, y colaboré en un contexto técnico internacional de alta disponibilidad.',
-          en: 'Implemented business logic in languages used for critical systems, worked in Unix/Linux with development and automation tools, and collaborated in an international high-availability technical context.',
-        },
+        }, {
+          es: 'Apoyé la integración de servicios distribuidos y APIs en un contexto técnico internacional de alta disponibilidad.',
+          en: 'Supported the integration of distributed services and APIs in an international high-availability technical context.',
+        }],
+        measuredBy: [{
+          es: 'Varios componentes backend desarrollados para el futuro integrated Network Manager de EUROCONTROL.',
+          en: 'Several backend components developed for EUROCONTROL\'s future integrated Network Manager.',
+        }, {
+          es: 'Integraciones vía APIs, servicios distribuidos y mensajería.',
+          en: 'API integrations, distributed services and messaging.',
+        }, {
+          es: 'Volumen de tráfico correspondiente a la gestión del espacio aéreo europeo.',
+          en: 'Traffic volume corresponding to European airspace management.',
+        }],
+        execution: [{
+          es: 'Implementé lógica de negocio en lenguajes orientados a sistemas críticos (Ada 95, C++, Java).',
+          en: 'Implemented business logic in languages used for critical systems (Ada 95, C++, Java).',
+        }, {
+          es: 'Trabajé en Unix/Linux con herramientas de desarrollo y automatización.',
+          en: 'Worked in Unix/Linux with development and automation tools.',
+        }, {
+          es: 'Colaboré en un contexto técnico internacional de alta disponibilidad.',
+          en: 'Collaborated in an international high-availability technical context.',
+        }],
       },
     },
     {
@@ -469,18 +522,33 @@ export const profile = {
       },
       stack: ['5G', 'IoT', 'Cybersecurity', 'Embedded Systems', 'Industrial Networks', 'Cloud Security', 'Risk Analysis', 'AGV', 'AMR'],
       xyz: {
-        achievement: {
+        achievement: [{
           es: 'Impulsé conectividad industrial segura y de baja latencia para AGVs, AMRs y estaciones de carga inteligentes.',
           en: 'Enabled secure, low-latency industrial connectivity for AGVs, AMRs and smart charging stations.',
-        },
-        measuredBy: {
-          es: 'Medido por comunicaciones 5G embebidas implementadas, integración en entornos industriales con requisitos de disponibilidad, seguridad y baja latencia, y análisis de riesgos en redes, cloud, móviles, embebidos y software propietario.',
-          en: 'Measured through implemented embedded 5G communications, integration in industrial environments with availability, security and low-latency requirements, and risk analysis across networks, cloud, mobile, embedded and proprietary software.',
-        },
-        execution: {
-          es: 'Desarrollé comunicaciones 5G en sistemas embebidos, diseñé soluciones de protección de información sensible y colaboré en proyectos donde convergen IoT, comunicaciones, robótica y ciberseguridad.',
-          en: 'Developed 5G communications in embedded systems, designed solutions to protect sensitive information and collaborated on projects where IoT, communications, robotics and cybersecurity converge.',
-        },
+        }, {
+          es: 'Elevé el enfoque de ciberseguridad en soluciones industriales conectadas mediante análisis de riesgos y protección de información sensible.',
+          en: 'Raised the cybersecurity focus in connected industrial solutions through risk analysis and sensitive-information protection.',
+        }],
+        measuredBy: [{
+          es: 'Comunicaciones 5G embebidas implementadas en entornos industriales.',
+          en: 'Embedded 5G communications implemented in industrial environments.',
+        }, {
+          es: 'Integración con requisitos de disponibilidad, seguridad y baja latencia.',
+          en: 'Integration with availability, security and low-latency requirements.',
+        }, {
+          es: 'Análisis de riesgos en redes, cloud, móviles, embebidos y software propietario.',
+          en: 'Risk analysis across networks, cloud, mobile, embedded and proprietary software.',
+        }],
+        execution: [{
+          es: 'Desarrollé comunicaciones 5G en sistemas embebidos.',
+          en: 'Developed 5G communications in embedded systems.',
+        }, {
+          es: 'Diseñé soluciones de protección de información sensible.',
+          en: 'Designed solutions to protect sensitive information.',
+        }, {
+          es: 'Colaboré en proyectos donde convergen IoT, comunicaciones, robótica y ciberseguridad.',
+          en: 'Collaborated on projects where IoT, communications, robotics and cybersecurity converge.',
+        }],
       },
     },
     {
@@ -522,18 +590,36 @@ export const profile = {
         'Yaskawa',
       ],
       xyz: {
-        achievement: {
+        achievement: [{
           es: 'Aceleré el desarrollo, validación e integración de soluciones de robótica móvil e industrial.',
           en: 'Accelerated the development, validation and integration of mobile and industrial robotics solutions.',
-        },
-        measuredBy: {
-          es: 'Medido por AGVs, AMRs y brazos Yaskawa programados, lógica PLC implementada en CODESYS, comunicaciones industriales integradas, simulaciones/gemelos digitales creados y participación en proyectos europeos de I+D.',
-          en: 'Measured through programmed AGVs, AMRs and Yaskawa arms, PLC logic implemented in CODESYS, integrated industrial communications, simulations/digital twins created and participation in European R&D projects.',
-        },
-        execution: {
-          es: 'Programé AGVs y robots con ROS y software propietario, desarrollé aplicaciones embebidas en C/C++ y Python sobre hardware industrial, integré TCP/IP, UDP, OPC-UA, CAN, CANopen, MINICAN e IEC 61499, y preparé documentación técnica, entregables y presentaciones.',
-          en: 'Programmed AGVs and robots using ROS and proprietary software, developed embedded applications in C/C++ and Python on industrial hardware, integrated TCP/IP, UDP, OPC-UA, CAN, CANopen, MINICAN and IEC 61499, and prepared technical documentation, deliverables and presentations.',
-        },
+        }, {
+          es: 'Conecté software embebido, comunicaciones industriales y simulación para validar soluciones robóticas de I+D.',
+          en: 'Connected embedded software, industrial communications and simulation to validate R&D robotics solutions.',
+        }],
+        measuredBy: [{
+          es: 'AGVs, AMRs y brazos Yaskawa programados.',
+          en: 'Programmed AGVs, AMRs and Yaskawa arms.',
+        }, {
+          es: 'Lógica PLC implementada en CODESYS.',
+          en: 'PLC logic implemented in CODESYS.',
+        }, {
+          es: 'Comunicaciones industriales integradas (TCP/IP, UDP, OPC-UA, CAN, CANopen, MINICAN, IEC 61499).',
+          en: 'Integrated industrial communications (TCP/IP, UDP, OPC-UA, CAN, CANopen, MINICAN, IEC 61499).',
+        }, {
+          es: 'Simulaciones y gemelos digitales creados. Participación en proyectos europeos de I+D.',
+          en: 'Simulations and digital twins created. Participation in European R&D projects.',
+        }],
+        execution: [{
+          es: 'Programé AGVs y robots con ROS y software propietario.',
+          en: 'Programmed AGVs and robots using ROS and proprietary software.',
+        }, {
+          es: 'Desarrollé aplicaciones embebidas en C/C++ y Python sobre hardware industrial (Raspberry Pi, BeagleBone, Arduino).',
+          en: 'Developed embedded applications in C/C++ and Python on industrial hardware (Raspberry Pi, BeagleBone, Arduino).',
+        }, {
+          es: 'Preparé documentación técnica, entregables y presentaciones.',
+          en: 'Prepared technical documentation, deliverables and presentations.',
+        }],
       },
     },
     {
@@ -558,18 +644,30 @@ export const profile = {
       },
       stack: ['Industrial Robotics', 'Robotic Manipulators', 'Automation', 'Robot Programming', 'Kinematics', 'Control Systems'],
       xyz: {
-        achievement: {
+        achievement: [{
           es: 'Convertí experiencia industrial en formación aplicada sobre robótica industrial y tecnologías emergentes.',
           en: 'Turned industrial experience into applied training on industrial robotics and emerging technologies.',
-        },
-        measuredBy: {
-          es: 'Medido por contenidos impartidos en el título propio de Experto Universitario en Robótica Industrial y Tecnologías Emergentes. Métricas de alumnado o horas docentes pendientes de concretar.',
-          en: 'Measured through content delivered in the University Expert programme in Industrial Robotics and Emerging Technologies. Student or teaching-hour metrics still to be confirmed.',
-        },
-        execution: {
-          es: 'Preparé contenidos técnicos, expliqué fundamentos de cinemática, programación y control de robots industriales, y apoyé la formación práctica en automatización y robótica.',
-          en: 'Prepared technical content, explained fundamentals of kinematics, programming and industrial robot control, and supported practical training in automation and robotics.',
-        },
+        }, {
+          es: 'Acerqué fundamentos de cinemática, programación y control de robots a un formato docente práctico.',
+          en: 'Brought fundamentals of kinematics, programming and robot control into a practical teaching format.',
+        }],
+        measuredBy: [{
+          es: '12 alumnos formados en el título propio de Experto Universitario en Robótica Industrial y Tecnologías Emergentes.',
+          en: '12 students trained in the University Expert programme in Industrial Robotics and Emerging Technologies.',
+        }, {
+          es: '10 horas lectivas impartidas con alto grado de satisfacción.',
+          en: '10 teaching hours delivered with high satisfaction scores.',
+        }],
+        execution: [{
+          es: 'Preparé contenidos técnicos sobre robótica industrial.',
+          en: 'Prepared technical content on industrial robotics.',
+        }, {
+          es: 'Expliqué fundamentos de cinemática, programación y control de robots industriales.',
+          en: 'Explained fundamentals of kinematics, programming and industrial robot control.',
+        }, {
+          es: 'Apoyé la formación práctica en automatización y robótica.',
+          en: 'Supported practical training in automation and robotics.',
+        }],
       },
     },
     {
@@ -594,18 +692,33 @@ export const profile = {
       },
       stack: ['Collaborative Robotics', 'Elfin Cobot', "Han's Robot", 'Robot Programming', 'TIG Welding', 'Computer Vision', 'Point Clouds', '3D Modeling'],
       xyz: {
-        achievement: {
+        achievement: [{
           es: 'Construí demostradores de robótica colaborativa y visión artificial para aplicaciones industriales y presentaciones comerciales.',
           en: 'Built collaborative robotics and computer vision demonstrators for industrial applications and commercial presentations.',
-        },
-        measuredBy: {
-          es: 'Medido por demos funcionales con brazo colaborativo Elfin, aplicaciones de soldadura TIG/asistencia física, procesamiento de nubes de puntos y material técnico de soporte comercial.',
-          en: 'Measured through functional demos with an Elfin collaborative arm, TIG welding/physical assistance applications, point-cloud processing and technical material for commercial support.',
-        },
-        execution: {
-          es: 'Programé el cobot Elfin de Han’s Robot, desarrollé aplicaciones robóticas, trabajé con visión artificial y modelado 3D, y preparé demostraciones para eventos, ferias y presentaciones.',
-          en: "Programmed Han's Robot Elfin cobot, developed robotic applications, worked with computer vision and 3D modelling, and prepared demos for events, fairs and presentations.",
-        },
+        }, {
+          es: 'Apoyé la validación comercial de aplicaciones robóticas mediante demos funcionales y material técnico.',
+          en: 'Supported commercial validation of robotics applications through functional demos and technical material.',
+        }],
+        measuredBy: [{
+          es: 'Demos funcionales con brazo colaborativo Elfin.',
+          en: 'Functional demos with an Elfin collaborative arm.',
+        }, {
+          es: 'Aplicaciones de soldadura TIG y asistencia física.',
+          en: 'TIG welding and physical assistance applications.',
+        }, {
+          es: 'Procesamiento de nubes de puntos y material técnico de soporte comercial.',
+          en: 'Point-cloud processing and technical material for commercial support.',
+        }],
+        execution: [{
+          es: 'Programé el cobot Elfin de Han\u2019s Robot.',
+          en: "Programmed Han's Robot Elfin cobot.",
+        }, {
+          es: 'Desarrollé aplicaciones robóticas con visión artificial y modelado 3D.',
+          en: 'Developed robotic applications with computer vision and 3D modelling.',
+        }, {
+          es: 'Preparé demostraciones para eventos, ferias y presentaciones.',
+          en: 'Prepared demos for events, fairs and presentations.',
+        }],
       },
     },
   ] satisfies ExperienceItem[],
@@ -1048,15 +1161,16 @@ export const profile = {
           en: 'Interuniversity master delivered by the universities of Oviedo, La Rioja and Public University of Navarra, focused on the principles of Project Management and the skills required for end-to-end project leadership.',
         },
         {
-          es: 'Programa orientado a gestionar un proyecto en todas sus fases, desde la idea hasta la entrega, coordinando a los agentes intervinientes e incorporando principios de los estándares internacionales IPMA y PMI.',
-          en: 'Programme focused on managing a project across all phases, from idea to delivery, coordinating stakeholders and incorporating principles from IPMA and PMI international standards.',
+          es: 'TFM: El teletrabajo en el desarrollo de proyectos de sistemas de información.',
+          en: 'Master thesis: Teleworking in the development of information systems projects.',
+          url: `${B}docs/tfm-teletrabajo-sistemas-informacion.pdf`,
         },
       ],
     },
     {
       degree: {
-        es: 'Grado en Ingeniería Electrónica Industrial y Automática (bilingüe)',
-        en: 'Bachelor of Industrial Electronics and Automatic Engineering (bilingual)',
+        es: 'Grado en Ingeniería Electrónica Industrial y Automática',
+        en: 'Bachelor of Industrial Electronics and Automatic Engineering',
       },
       institution: 'Universidad de Oviedo',
       url: 'https://www.uniovi.es/',
@@ -1082,8 +1196,8 @@ export const profile = {
       },
       details: [
         {
-          es: 'TFG: localización de iris y pupila mediante procesamiento de imágenes, Canny y Transformada Circular de Hough.',
-          en: 'Final project: iris and pupil localisation through image processing, Canny and Circular Hough Transform.',
+          es: 'Mención en Robótica. Itinerario Bilingüe (Inglés y Español).',
+          en: 'Robotics mention. Bilingual track (English and Spanish).',
         },
         {
           es: 'Mentor en el programa a-dUO para nuevos estudiantes Erasmus.',
@@ -1099,6 +1213,11 @@ export const profile = {
           es: 'Erasmus en Università di Bologna.',
           en: 'Erasmus year at Università di Bologna.',
           url: 'https://www.unibo.it/',
+        },
+        {
+          es: 'TFG: Procesamiento y análisis de imágenes digitales con fines biométricos.',
+          en: 'Final project: Digital image processing and analysis for biometric purposes.',
+          url: `${B}docs/tfg-procesamiento-imagenes-biometricas.pdf`,
         },
       ],
     },
