@@ -2145,16 +2145,28 @@ a.certification-title {
 }
 
 .qr-card {
+  appearance: none;
   animation: qrFadeIn 400ms ease forwards;
   background: var(--surface-elevated);
   border: 1px solid var(--line);
   border-radius: 10px;
   bottom: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  font: inherit;
   left: 16px;
   padding: 8px;
   position: fixed;
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease;
   z-index: 100;
+}
+
+.qr-card:hover,
+.qr-card:focus-visible {
+  border-color: color-mix(in srgb, var(--accent-secondary) 24%, var(--line));
+  transform: translateY(-1px);
 }
 
 .qr-image {

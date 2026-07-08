@@ -384,6 +384,7 @@ function App() {
   const [navSquishing, setNavSquishing] = useState(false)
   const [showQR, setShowQR] = useState(false)
   const [qrDataUrl, setQrDataUrl] = useState('')
+  const [qrDismissed, setQrDismissed] = useState(() => window.localStorage.getItem('qrDismissed') === 'true')
   const [expandedMobileSections, setExpandedMobileSections] = useState<Record<string, boolean>>({})
   const [activeProjectCategory, setActiveProjectCategory] = useState<ProjectCategory>('professional')
   const [showAllCerts, setShowAllCerts] = useState(false)
@@ -513,9 +514,17 @@ function App() {
   }, [])
 
   useEffect(() => {
+    if (qrDismissed) return
+
     const timer = setTimeout(() => setShowQR(true), 60_000)
     return () => clearTimeout(timer)
-  }, [])
+  }, [qrDismissed])
+
+  const dismissQR = () => {
+    window.localStorage.setItem('qrDismissed', 'true')
+    setQrDismissed(true)
+    setShowQR(false)
+  }
 
   useEffect(() => {
     document.documentElement.lang = locale
@@ -1295,10 +1304,10 @@ function App() {
         ) : null}
       </main>
 
-      {showQR && qrDataUrl ? (
-        <aside className="qr-card" aria-label="Contact QR code">
+      {showQR && qrDataUrl && !qrDismissed ? (
+        <button className="qr-card" type="button" aria-label="Dismiss contact QR code" onClick={dismissQR}>
           <img src={qrDataUrl} alt="Contact QR" className="qr-image" />
-        </aside>
+        </button>
       ) : null}
     </div>
   )
