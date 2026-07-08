@@ -963,11 +963,51 @@ h3 {
   padding: 28px;
 }
 
+.experience-card.is-collapsed {
+  gap: 0;
+}
+
 .experience-header {
   align-items: center;
   display: grid;
   gap: 18px;
-  grid-template-columns: 54px minmax(0, 1fr);
+  grid-template-columns: 54px minmax(0, 1fr) 38px;
+}
+
+.experience-collapse-button {
+  align-items: center;
+  align-self: start;
+  background: color-mix(in srgb, var(--surface-elevated) 74%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-secondary) 20%, var(--line));
+  border-radius: 999px;
+  color: color-mix(in srgb, var(--accent) 72%, var(--accent-secondary));
+  cursor: pointer;
+  display: inline-flex;
+  height: 38px;
+  justify-content: center;
+  justify-self: end;
+  padding: 0;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+  width: 38px;
+}
+
+.experience-collapse-button svg {
+  transition: transform 180ms ease;
+}
+
+.experience-collapse-button:hover,
+.experience-collapse-button:focus-visible {
+  background: color-mix(in srgb, var(--accent-secondary) 12%, var(--surface-elevated));
+  border-color: color-mix(in srgb, var(--accent-secondary) 36%, var(--line));
+  transform: translateY(-1px);
+}
+
+.experience-card.is-collapsed .experience-collapse-button svg {
+  transform: rotate(-90deg);
 }
 
 .company-logo {
@@ -1703,7 +1743,7 @@ a.certification-title {
   display: block;
   height: 100%;
   min-height: 100svh;
-  transform: translateY(13%) scale(1.2);
+  transform: translateY(26%) scale(1.08);
   transform-origin: center top;
   width: 100%;
 }
@@ -1714,15 +1754,31 @@ a.certification-title {
 }
 
 .atm-neighbour {
-  fill: #edf1f4;
-  opacity: 0.92;
+  fill: #c9cfd4;
+  opacity: 0.96;
+}
+
+.atm-region-svg {
+  display: block;
+  overflow: visible;
+}
+
+.atm-region,
+.atm-neighbour-territory {
+  fill: #d9d9d9;
+  opacity: 1;
+  stroke: none;
 }
 
 .atm-region {
-  fill: color-mix(in srgb, #9eabb3 78%, #526270);
-  opacity: 0.82;
-  stroke: color-mix(in srgb, #ffffff 52%, var(--accent-secondary));
-  stroke-width: 1.35;
+  stroke: color-mix(in srgb, #ffffff 78%, transparent);
+  stroke-linejoin: round;
+  stroke-width: 2.8px;
+  vector-effect: non-scaling-stroke;
+}
+
+.atm-neighbour-territory {
+  fill: #c9cfd4;
 }
 
 .atm-coast,
@@ -1756,7 +1812,7 @@ a.certification-title {
 .atm-route {
   animation: atmRoutePulse 5.8s linear infinite;
   stroke: color-mix(in srgb, #4f8df7 72%, #ffffff);
-  stroke-dasharray: 9 16;
+  stroke-dasharray: 18 20;
 }
 
 .atm-route--secondary {
@@ -1773,20 +1829,44 @@ a.certification-title {
 }
 
 .atm-sector {
+  --regulated-fill: color-mix(in srgb, var(--accent) 18%, transparent);
+  --regulated-stroke: color-mix(in srgb, var(--accent) 58%, transparent);
   animation: atmSectorDrift 12s ease-in-out infinite alternate;
-  fill: color-mix(in srgb, var(--accent) 18%, transparent);
-  stroke: color-mix(in srgb, var(--accent) 58%, transparent);
+  fill: var(--regulated-fill);
+  stroke: var(--regulated-stroke);
   stroke-width: 1.3;
 }
 
 .atm-sector--wide {
-  animation-delay: -4s;
-  fill: color-mix(in srgb, var(--accent-secondary) 18%, transparent);
+  --regulated-fill: color-mix(in srgb, var(--accent-secondary) 18%, transparent);
+  animation: atmSectorDrift 12s ease-in-out -4s infinite alternate;
 }
 
 .atm-sector--soft {
-  animation-delay: -8s;
-  fill: color-mix(in srgb, var(--accent) 12%, transparent);
+  --regulated-fill: color-mix(in srgb, var(--accent) 12%, transparent);
+  animation: atmSectorDrift 12s ease-in-out -8s infinite alternate;
+}
+
+.atm-sector-alert {
+  fill: color-mix(in srgb, #ffd84d 42%, transparent);
+  filter: drop-shadow(0 0 10px color-mix(in srgb, #ffd84d 42%, transparent));
+  opacity: 0;
+  pointer-events: none;
+  stroke: color-mix(in srgb, #ffd84d 82%, #ffffff);
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.atm-sector-alert--ryr-left {
+  animation: atmTrafficAlertRyrLeft 21s linear infinite;
+}
+
+.atm-sector-alert--ryr-wide {
+  animation: atmTrafficAlertRyrWide 21s linear infinite;
+}
+
+.atm-sector-alert--ibe-wide {
+  animation: atmTrafficAlertIbeWide 17s linear infinite;
 }
 
 .atm-city circle {
@@ -1796,6 +1876,7 @@ a.certification-title {
 }
 
 .atm-city text,
+.atm-airport text,
 .atm-plane text {
   fill: #ffffff;
   font-family: var(--font-sf-mono);
@@ -1803,29 +1884,87 @@ a.certification-title {
   font-weight: 760;
 }
 
+.atm-airport {
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent) 38%, transparent));
+}
+
+.atm-airport-marker {
+  fill: color-mix(in srgb, var(--accent) 20%, transparent);
+  stroke: color-mix(in srgb, #ffffff 68%, var(--accent));
+  stroke-width: 2;
+}
+
+.atm-airport-icon {
+  fill: none;
+  stroke: #ffffff;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.2;
+}
+
 .atm-plane {
   fill: #ffffff;
   opacity: 0.82;
 }
 
+.atm-plane-frame {
+  fill: color-mix(in srgb, var(--accent) 15%, transparent);
+  stroke: color-mix(in srgb, var(--accent) 86%, #ffffff);
+  stroke-width: 2;
+}
+
+.atm-plane-trail {
+  fill: none;
+  opacity: 0.58;
+  stroke: #ffffff;
+  stroke-dasharray: 8 18;
+  stroke-linecap: round;
+  stroke-width: 1;
+}
+
 .atm-plane-symbol {
+  dominant-baseline: middle;
   filter: drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 48%, transparent));
   font-family: "Segoe UI Symbol", "Arial Unicode MS", var(--font-sf-pro);
   fill: #ffffff;
-  font-size: 38px;
+  font-size: 100px;
   font-weight: 700;
+  text-anchor: middle;
+}
+
+.atm-plane-id {
+  dominant-baseline: middle;
+}
+
+.atm-plane-meta {
+  dominant-baseline: middle;
+  font-size: 7px;
+  font-weight: 620;
+  opacity: 0.82;
 }
 
 .atm-plane--one {
   animation: atmPlaneOne 17s linear infinite;
 }
 
+.atm-plane--one .atm-plane-symbol {
+  transform: rotate(-21deg);
+}
+
 .atm-plane--two {
   animation: atmPlaneTwo 21s linear infinite;
 }
 
+.atm-plane--two .atm-plane-symbol {
+  transform: rotate(4deg);
+}
+
 .atm-plane--three {
   animation: atmPlaneThree 19s linear infinite;
+}
+
+.atm-plane--three .atm-plane-symbol {
+  transform: rotate(-8deg);
 }
 
 .contact-panel > .contact-section {
@@ -2145,33 +2284,75 @@ button:focus-visible {
   }
 }
 
+@keyframes atmTrafficAlertRyrLeft {
+  0%,
+  26%,
+  41%,
+  100% {
+    opacity: 0;
+  }
+
+  29%,
+  38% {
+    opacity: 1;
+  }
+}
+
+@keyframes atmTrafficAlertRyrWide {
+  0%,
+  48%,
+  65%,
+  100% {
+    opacity: 0;
+  }
+
+  51%,
+  62% {
+    opacity: 1;
+  }
+}
+
+@keyframes atmTrafficAlertIbeWide {
+  0%,
+  48%,
+  66%,
+  100% {
+    opacity: 0;
+  }
+
+  51%,
+  63% {
+    opacity: 1;
+  }
+}
+
 @keyframes atmPlaneOne {
   0% {
-    transform: translate(70px, 582px) rotate(-21deg);
+    transform: translate(-180px, 680px);
   }
 
   100% {
-    transform: translate(1090px, 184px) rotate(-21deg);
+    transform: translate(1380px, 126px);
   }
 }
 
 @keyframes atmPlaneTwo {
   0% {
-    transform: translate(178px, 236px) rotate(4deg);
+    transform: translate(-170px, 214px);
   }
 
   100% {
-    transform: translate(930px, 286px) rotate(4deg);
+    transform: translate(1370px, 316px);
   }
 }
 
 @keyframes atmPlaneThree {
   0% {
-    transform: translate(222px, 610px) rotate(-8deg);
+    transform: translate(-160px, 700px);
   }
 
   100% {
-    transform: translate(1016px, 492px) rotate(-8deg);
+    transform: translate(1376px, 450px);
   }
 }
 
@@ -2236,6 +2417,12 @@ button:focus-visible {
     scrollbar-width: none;
   }
 
+  .nav-links::before,
+  .profile-agv-runner,
+  .contact-atm-backdrop {
+    display: none;
+  }
+
   .nav-links::-webkit-scrollbar {
     display: none;
   }
@@ -2294,7 +2481,7 @@ button:focus-visible {
   }
 
   .contact-atm-map {
-    transform: translateY(12%) scale(1.28);
+    transform: translateY(16%) scale(1.12);
   }
 
   .hero-section,
@@ -2408,7 +2595,12 @@ button:focus-visible {
 
   .experience-header {
     align-items: start;
-    grid-template-columns: 44px minmax(0, 1fr);
+    grid-template-columns: 44px minmax(0, 1fr) 34px;
+  }
+
+  .experience-collapse-button {
+    height: 34px;
+    width: 34px;
   }
 
   .company-logo {

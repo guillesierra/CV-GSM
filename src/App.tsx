@@ -314,16 +314,25 @@ function ProjectImage({ locale, project }: { locale: Locale; project: ProjectIte
     return (
       <div className="project-media">
         <a className="project-image-link" href={project.link} target="_blank" rel="noreferrer" aria-label={project.title[locale]}>
-          <video
-            className="project-video-preview"
-            src={project.previewVideo}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            onError={() => setFailed(true)}
-          />
+          {failed ? (
+            <img
+              src={project.image}
+              alt={project.title[locale]}
+              loading="lazy"
+            />
+          ) : (
+            <video
+              className="project-video-preview"
+              src={project.previewVideo}
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster={project.image}
+              preload="auto"
+              onError={() => setFailed(true)}
+            />
+          )}
         </a>
         <a className="image-credit" href={project.imageCredit.sourceUrl} target="_blank" rel="noreferrer" aria-label={creditLabel} title={creditLabel}>
           {project.imageCredit.license} · {project.imageCredit.author}
@@ -379,6 +388,7 @@ function App() {
   const [activeProjectCategory, setActiveProjectCategory] = useState<ProjectCategory>('professional')
   const [showAllCerts, setShowAllCerts] = useState(false)
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({})
+  const [collapsedExperienceCards, setCollapsedExperienceCards] = useState<Record<string, boolean>>({})
   const navRef = useRef<HTMLElement | null>(null)
   const tabRefs = useRef(new Map<SectionId, HTMLButtonElement>())
   const terminalInputRef = useRef<HTMLInputElement | null>(null)
@@ -431,7 +441,19 @@ function App() {
     preloadLink.href = eagerPreviewVideo
     document.head.appendChild(preloadLink)
 
-    return () => preloadLink.remove()
+    const preloadVideo = document.createElement('video')
+    preloadVideo.muted = true
+    preloadVideo.playsInline = true
+    preloadVideo.preload = 'auto'
+    preloadVideo.src = eagerPreviewVideo
+    preloadVideo.style.cssText = 'height:1px;left:-9999px;opacity:0;pointer-events:none;position:absolute;width:1px;'
+    document.body.appendChild(preloadVideo)
+    preloadVideo.load()
+
+    return () => {
+      preloadLink.remove()
+      preloadVideo.remove()
+    }
   }, [])
 
   useEffect(() => {
@@ -852,10 +874,12 @@ function App() {
             <div className={expandedMobileSections.experience ? 'timeline experience-timeline mobile-collapsible is-expanded' : 'timeline experience-timeline mobile-collapsible'}>
               {getExperienceDisplayItems(profile.experience).map((item) => {
                 const timelineYears = getTimelineYears(item, locale)
+                const experienceCardId = `${item.company}-${item.period.es}`
+                const isExperienceCollapsed = Boolean(collapsedExperienceCards[experienceCardId])
 
                 return (
-                  <div className="experience-row" key={`${item.company}-${item.period.es}`}>
-                    <article className="experience-card">
+                  <div className="experience-row" key={experienceCardId}>
+                    <article className={isExperienceCollapsed ? 'experience-card is-collapsed' : 'experience-card'}>
                     <div className="experience-header">
                       <a className="company-logo" href={item.url} target="_blank" rel="noreferrer">
                         <img src={item.logo} alt={`${item.company} logo`} loading="lazy" />
@@ -863,43 +887,59 @@ function App() {
                       <div>
                         <div className="card-kicker">
                           <span>{item.period[locale]}</span>
-                          {item.place ? <span>{item.place[locale]}</span> : null}
+                          {!isExperienceCollapsed && item.place ? <span>{item.place[locale]}</span> : null}
                         </div>
                         <h3>{item.role[locale]}</h3>
                         <a className="company" href={item.url} target="_blank" rel="noreferrer">
                           {item.company}
                           <ArrowUpRight size={14} aria-hidden="true" />
                         </a>
-                        <p className="company-summary">{item.companySummary[locale]}</p>
+                        {!isExperienceCollapsed ? <p className="company-summary">{item.companySummary[locale]}</p> : null}
                       </div>
+                      <button
+                        aria-expanded={!isExperienceCollapsed}
+                        aria-label={isExperienceCollapsed ? (locale === 'es' ? 'Expandir experiencia' : 'Expand experience') : (locale === 'es' ? 'Contraer experiencia' : 'Collapse experience')}
+                        className="experience-collapse-button"
+                        type="button"
+                        onClick={() => setCollapsedExperienceCards((current) => ({
+                          ...current,
+                          [experienceCardId]: !current[experienceCardId],
+                        }))}
+                      >
+                        <ChevronDown size={18} aria-hidden="true" />
+                      </button>
                     </div>
-                    {item.stack ? (
-                      <div className="experience-stack" aria-label="Technology stack">
-                        {item.stack.map((technology) => (
-                          <span key={technology}>{technology}</span>
-                        ))}
-                      </div>
+                    {!isExperienceCollapsed ? (
+                      <>
+                        {item.stack ? (
+                          <div className="experience-stack" aria-label="Technology stack">
+                            {item.stack.map((technology) => (
+                              <span key={technology}>{technology}</span>
+                            ))}
+                          </div>
+                        ) : null}
+                        <div className="xyz-grid">
+                          <div className="xyz-item">
+                            <span>{profile.labels.achievement[locale]}</span>
+                            {item.xyz.achievement.map((point, i) => (
+                              <p key={`ach-${i}`}>{point[locale]}</p>
+                            ))}
+                          </div>
+                          <div className="xyz-item">
+                            <span>{profile.labels.measuredBy[locale]}</span>
+                            {item.xyz.measuredBy.map((point, i) => (
+                              <p key={`met-${i}`}>{point[locale]}</p>
+                            ))}
+                          </div>
+                          <div className="xyz-item">
+                            <span>{profile.labels.execution[locale]}</span>
+                            {item.xyz.execution.map((point, i) => (
+                              <p key={`exe-${i}`}>{point[locale]}</p>
+                            ))}
+                          </div>
+                        </div>
+                      </>
                     ) : null}
-                    <div className="xyz-grid">
-                      <div className="xyz-item">
-                        <span>{profile.labels.achievement[locale]}</span>
-                        {item.xyz.achievement.map((point, i) => (
-                          <p key={`ach-${i}`}>{point[locale]}</p>
-                        ))}
-                      </div>
-                      <div className="xyz-item">
-                        <span>{profile.labels.measuredBy[locale]}</span>
-                        {item.xyz.measuredBy.map((point, i) => (
-                          <p key={`met-${i}`}>{point[locale]}</p>
-                        ))}
-                      </div>
-                      <div className="xyz-item">
-                        <span>{profile.labels.execution[locale]}</span>
-                        {item.xyz.execution.map((point, i) => (
-                          <p key={`exe-${i}`}>{point[locale]}</p>
-                        ))}
-                      </div>
-                    </div>
                     </article>
                     <div className="timeline-year-marker" aria-hidden="true">
                       {timelineYears.end ? (
@@ -1155,47 +1195,71 @@ function App() {
             <div className="contact-atm-backdrop" aria-hidden="true">
               <svg className="contact-atm-map" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid slice">
                 <rect className="atm-sea" x="0" y="-180" width="1200" height="900" />
-                <path className="atm-neighbour" d="M0 386 L76 376 L116 390 L160 382 L202 414 L252 400 L306 426 L362 402 L420 418 L474 392 L532 405 L588 378 L646 390 L698 366 L748 376 L800 358 L858 363 L908 342 L960 350 L1002 332 L1054 336 L1088 318 L1126 324 L1200 340 L1200 720 L0 720 Z" />
-                <path className="atm-region" d="M64 246 L96 236 L132 241 L162 229 L199 232 L235 225 L270 230 L312 219 L352 228 L392 220 L432 225 L470 216 L512 224 L548 215 L588 225 L626 219 L664 229 L706 225 L748 235 L790 235 L832 246 L876 247 L916 258 L960 258 L1002 270 L1048 268 L1086 282 L1134 286 L1160 308 L1126 324 L1088 318 L1054 336 L1002 332 L960 350 L908 342 L858 363 L800 358 L748 376 L698 366 L646 390 L588 378 L532 405 L474 392 L420 418 L362 402 L306 426 L252 400 L202 414 L160 382 L116 390 L88 350 L106 314 L76 284 Z" />
-                <path className="atm-coast" d="M64 246 L96 236 L132 241 L162 229 L199 232 L235 225 L270 230 L312 219 L352 228 L392 220 L432 225 L470 216 L512 224 L548 215 L588 225 L626 219 L664 229 L706 225 L748 235 L790 235 L832 246 L876 247 L916 258 L960 258 L1002 270 L1048 268 L1086 282 L1134 286 L1160 308" />
-                <path className="atm-boundary" d="M88 350 L106 314 L76 284 L64 246" />
-                <path className="atm-boundary" d="M1126 324 L1160 308 L1134 286" />
-                <path className="atm-terrain" d="M138 362 C252 326 354 348 462 318 S662 300 786 334 S978 370 1118 320" />
-                <path className="atm-terrain" d="M178 314 C300 286 420 306 548 286 S780 280 944 318" />
-                <path className="atm-terrain" d="M218 408 C346 390 478 408 610 380 S832 354 1048 398" />
-                <path className="atm-route" d="M108 590 L318 418 L558 294 L828 238 L1084 184" />
-                <path className="atm-route atm-route--secondary" d="M184 238 L398 344 L640 356 L924 284" />
-                <path className="atm-route atm-route--secondary" d="M220 610 L470 466 L702 362 L1010 492" />
+                <rect className="atm-neighbour" x="0" y="360" width="1200" height="360" />
+                <svg className="atm-region-svg" x="0" y="0" width="1200" height="720" viewBox="0 0 100 100" preserveAspectRatio="none">
+                  <polygon
+                    className="atm-region"
+                    points="99.87,40.80 94.53,40.20 84.40,35.60 80.13,35.60 77.07,33.80 73.60,34.60 70.53,29.80 68.27,30.20 66.40,28.40 61.73,29.00 58.53,28.00 57.33,29.40 55.73,29.20 56.27,27.00 53.33,26.00 52.40,22.60 50.67,21.80 50.13,20.20 49.33,22.20 47.33,23.00 45.87,26.40 42.93,25.40 42.53,26.80 40.13,28.20 38.53,27.00 37.20,27.60 37.07,26.20 36.67,27.00 35.20,25.20 31.07,28.60 29.20,27.40 28.13,28.40 26.53,27.00 26.27,28.60 21.87,28.40 20.80,26.80 17.20,28.20 15.47,26.80 13.73,28.20 8.67,26.60 7.60,28.20 5.73,28.20 4.93,34.40 2.53,38.20 0.27,38.00 0.00,40.60 2.00,42.60 1.87,45.60 2.93,47.80 4.40,47.80 4.40,52.40 7.87,55.60 7.47,58.40 8.40,60.80 10.93,59.20 11.47,57.20 13.20,59.60 13.20,61.60 10.00,65.20 9.07,64.40 6.93,69.80 8.13,71.80 8.53,68.40 10.13,72.00 11.47,72.00 12.93,74.40 12.80,77.40 15.07,78.60 15.20,80.20 17.20,77.40 23.87,77.80 28.00,75.80 28.00,73.80 26.67,73.80 26.27,72.00 28.40,72.00 29.33,68.40 30.80,66.80 31.87,68.60 33.47,68.40 35.73,70.40 36.13,67.60 37.47,67.40 39.47,69.40 40.67,68.60 41.20,65.40 43.47,67.00 44.67,66.00 45.73,69.60 47.47,71.80 51.60,74.00 53.07,73.40 53.60,69.80 55.60,66.80 60.80,69.60 63.20,69.40 63.73,67.00 66.93,67.40 67.87,63.80 71.07,65.20 76.00,62.40 77.60,63.40 78.93,57.20 81.73,57.80 85.07,52.80 86.67,54.00 87.87,57.40 91.20,57.00 92.27,51.00 95.33,50.60 96.40,48.00 98.93,50.40 99.60,49.40 98.93,43.80"
+                  />
+                  <polygon
+                    className="atm-neighbour-territory"
+                    points="0,38.20 0,100 15.20,100 17.20,77.40 15.20,80.20 15.07,78.60 12.80,77.40 12.93,74.40 11.47,72.00 10.13,72.00 8.53,68.40 8.13,71.80 6.93,69.80 9.07,64.40 10.00,65.20 13.20,61.60 13.20,59.60 11.47,57.20 10.93,59.20 8.40,60.80 7.47,58.40 7.87,55.60 4.40,52.40 4.40,47.80 2.93,47.80 1.87,45.60 2.00,42.60 0.00,40.60"
+                  />
+                </svg>
+                <path className="atm-route" d="M-80 690 L108 590 L318 418 L558 294 L828 238 L1280 142" />
+                <path className="atm-route atm-route--secondary" d="M-64 116 L184 238 L398 344 L640 356 L924 284 L1276 190" />
+                <path className="atm-route atm-route--secondary" d="M-88 788 L220 610 L470 466 L702 362 L1010 492 L1288 558" />
                 <path className="atm-sector" d="M294 178 L438 224 L392 382 L248 336 Z" />
                 <path className="atm-sector atm-sector--wide" d="M640 198 L818 252 L778 456 L590 392 Z" />
                 <path className="atm-sector atm-sector--soft" d="M872 328 L1078 354 L1030 540 L850 508 Z" />
+                <path className="atm-sector-alert atm-sector-alert--ryr-left" d="M294 178 L438 224 L392 382 L248 336 Z" />
+                <path className="atm-sector-alert atm-sector-alert--ryr-wide" d="M640 198 L818 252 L778 456 L590 392 Z" />
+                <path className="atm-sector-alert atm-sector-alert--ibe-wide" d="M640 198 L818 252 L778 456 L590 392 Z" />
                 <circle className="atm-ring" cx="562" cy="352" r="128" />
                 <circle className="atm-ring atm-ring--small" cx="858" cy="282" r="82" />
 
                 <g className="atm-city atm-city--oviedo">
-                  <circle cx="578" cy="314" r="6" />
-                  <text x="592" y="318">Oviedo</text>
+                  <circle cx="586" cy="330" r="6" />
+                  <text x="600" y="334">Oviedo</text>
                 </g>
                 <g className="atm-city atm-city--gijon">
-                  <circle cx="656" cy="242" r="6" />
-                  <text x="670" y="246">Gijón</text>
+                  <circle cx="674" cy="218" r="6" />
+                  <text x="688" y="222">Gijón</text>
                 </g>
                 <g className="atm-city atm-city--aviles">
-                  <circle cx="510" cy="238" r="6" />
-                  <text x="524" y="242">Avilés</text>
+                  <circle cx="548" cy="210" r="6" />
+                  <text x="562" y="214">Avilés</text>
+                </g>
+
+                <g className="atm-airport" transform="translate(344 226)">
+                  <circle className="atm-airport-marker" cx="0" cy="0" r="12" />
+                  <path className="atm-airport-icon" d="M-6 -8 H6 L4.5 -3 H-4.5 Z M-3 -3 L-6 9 H6 L3 -3 M-5 4 H5 M-4.5 9 H4.5" />
+                  <text x="18" y="4">Aeropuerto de Asturias</text>
                 </g>
 
                 <g className="atm-plane atm-plane--one">
-                  <text className="atm-plane-symbol" x="-13" y="10">&#9992;</text>
-                  <text x="28" y="-8">IBE4026</text>
+                  <path className="atm-plane-trail" d="M-126 -8 H-26" transform="rotate(-21)" />
+                  <rect className="atm-plane-frame" x="-16" y="-24" width="32" height="32" />
+                  <text className="atm-plane-symbol" x="0" y="-8">&#9992;</text>
+                  <text className="atm-plane-id" x="28" y="-30">IBE4026</text>
+                  <text className="atm-plane-meta" x="28" y="-15">FL340</text>
+                  <text className="atm-plane-meta" x="28" y="-2">452 kt</text>
                 </g>
                 <g className="atm-plane atm-plane--two">
-                  <text className="atm-plane-symbol" x="-13" y="10">&#9992;</text>
-                  <text x="28" y="-8">RYR2931</text>
+                  <path className="atm-plane-trail" d="M-126 -8 H-26" transform="rotate(4)" />
+                  <rect className="atm-plane-frame" x="-16" y="-24" width="32" height="32" />
+                  <text className="atm-plane-symbol" x="0" y="-8">&#9992;</text>
+                  <text className="atm-plane-id" x="28" y="-30">RYR2931</text>
+                  <text className="atm-plane-meta" x="28" y="-15">FL280</text>
+                  <text className="atm-plane-meta" x="28" y="-2">416 kt</text>
                 </g>
                 <g className="atm-plane atm-plane--three">
-                  <text className="atm-plane-symbol" x="-13" y="10">&#9992;</text>
-                  <text x="28" y="-8">AEA095</text>
+                  <path className="atm-plane-trail" d="M-126 -8 H-26" transform="rotate(-8)" />
+                  <rect className="atm-plane-frame" x="-16" y="-24" width="32" height="32" />
+                  <text className="atm-plane-symbol" x="0" y="-8">&#9992;</text>
+                  <text className="atm-plane-id" x="28" y="-30">AEA095</text>
+                  <text className="atm-plane-meta" x="28" y="-15">FL300</text>
+                  <text className="atm-plane-meta" x="28" y="-2">438 kt</text>
                 </g>
               </svg>
             </div>
@@ -1206,11 +1270,6 @@ function App() {
                 <a className="primary-link contact-link" href={profile.links.linkedin} target="_blank" rel="noreferrer">
                   <ExternalLink size={18} aria-hidden="true" />
                   <span>{profile.contact.action[locale]}</span>
-                  <ArrowUpRight size={16} aria-hidden="true" />
-                </a>
-                <a className="contact-alt-link" href={profile.links.github} target="_blank" rel="noreferrer">
-                  <Code2 size={18} aria-hidden="true" />
-                  <span>{profile.contact.githubAction[locale]}</span>
                   <ArrowUpRight size={16} aria-hidden="true" />
                 </a>
                 <a className="contact-alt-link" href={`${import.meta.env.BASE_URL}cv.pdf`} download>
