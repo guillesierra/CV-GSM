@@ -470,7 +470,7 @@ function App() {
         setTimeout(() => setTerminalPhase('output'), 350)
         setTimeout(() => {
           setTerminalPhase('idle')
-          setTimeout(() => terminalInputRef.current?.focus(), 60)
+          setTimeout(() => terminalInputRef.current?.focus({ preventScroll: true }), 60)
         }, 550)
       }
     }, 55)
@@ -593,7 +593,6 @@ function App() {
       }
     }, 160)
     window.history.replaceState(null, '', `#${section}`)
-    window.scrollTo({ top: 0, behavior: 'auto' })
   }
 
   const toggleTheme = () => {
