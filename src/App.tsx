@@ -753,6 +753,13 @@ function App() {
             <span className="profile-agv-runner" aria-hidden="true">
               <img src={`${import.meta.env.BASE_URL}agv-runner.png`} alt="" />
             </span>
+            <span className="profile-agv-shelf" aria-hidden="true">
+              <svg className="agv-file-icon" viewBox="0 0 64 78">
+                <path className="agv-file-page" d="M5 5 H41 L59 23 V73 H5 Z" />
+                <path className="agv-file-fold" d="M41 5 V23 H59" />
+                <text className="agv-file-label" x="32" y="53">.gitignore</text>
+              </svg>
+            </span>
             <div className="hero-section">
               <div className="hero-copy">
                 <h1 id="hero-title">{profile.hero.title[locale]}</h1>
@@ -1209,12 +1216,18 @@ function App() {
                 <path className="atm-route" d="M-80 690 L108 590 L318 418 L558 294 L828 238 L1280 142" />
                 <path className="atm-route atm-route--secondary" d="M-64 116 L184 238 L398 344 L640 356 L924 284 L1276 190" />
                 <path className="atm-route atm-route--secondary" d="M-88 788 L220 610 L470 466 L702 362 L1010 492 L1288 558" />
-                <path className="atm-sector" d="M294 178 L438 224 L392 382 L248 336 Z" />
-                <path className="atm-sector atm-sector--wide" d="M640 198 L818 252 L778 456 L590 392 Z" />
-                <path className="atm-sector atm-sector--soft" d="M872 328 L1078 354 L1030 540 L850 508 Z" />
-                <path className="atm-sector-alert atm-sector-alert--ryr-left" d="M294 178 L438 224 L392 382 L248 336 Z" />
-                <path className="atm-sector-alert atm-sector-alert--ryr-wide" d="M640 198 L818 252 L778 456 L590 392 Z" />
-                <path className="atm-sector-alert atm-sector-alert--ibe-wide" d="M640 198 L818 252 L778 456 L590 392 Z" />
+                <g className="atm-sector-group">
+                  <path className="atm-sector" d="M294 178 L438 224 L392 382 L248 336 Z" />
+                  <path className="atm-sector-alert atm-sector-alert--ryr-left" d="M294 178 L438 224 L392 382 L248 336 Z" />
+                </g>
+                <g className="atm-sector-group atm-sector-group--wide">
+                  <path className="atm-sector atm-sector--wide" d="M640 198 L818 252 L778 456 L590 392 Z" />
+                  <path className="atm-sector-alert atm-sector-alert--ryr-wide" d="M640 198 L818 252 L778 456 L590 392 Z" />
+                  <path className="atm-sector-alert atm-sector-alert--ibe-wide" d="M640 198 L818 252 L778 456 L590 392 Z" />
+                </g>
+                <g className="atm-sector-group atm-sector-group--soft">
+                  <path className="atm-sector atm-sector--soft" d="M872 328 L1078 354 L1030 540 L850 508 Z" />
+                </g>
                 <circle className="atm-ring" cx="562" cy="352" r="128" />
                 <circle className="atm-ring atm-ring--small" cx="858" cy="282" r="82" />
 

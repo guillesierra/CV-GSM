@@ -78,17 +78,17 @@
   border: 0;
   color: var(--ink);
   cursor: pointer;
-  height: 44px;
+  height: 50px;
   justify-content: center;
   padding: 0;
-  width: 48px;
+  width: 56px;
 }
 
 .brand-logo {
   display: block;
-  height: 38px;
+  height: 46px;
   object-fit: contain;
-  width: 38px;
+  width: 46px;
 }
 
 .nav-links {
@@ -290,6 +290,9 @@ main {
   --agv-size: clamp(58px, 5.8vw, 86px);
   --agv-start-x: calc((var(--agv-size) * -1) - 42px);
   --agv-start-y: 82px;
+  --agv-accelerate-x-1: 14vw;
+  --agv-accelerate-x-2: 34vw;
+  --agv-accelerate-x-3: 50vw;
   --agv-cruise-x: 58vw;
   --agv-brake-x: 70vw;
   --agv-near-turn-x: 78vw;
@@ -297,6 +300,7 @@ main {
   --agv-creep-x: 86vw;
   --agv-pre-turn-x: 88vw;
   --agv-turn-x: calc(100vw - var(--agv-size) - 132px);
+  --agv-file-x: calc(var(--agv-turn-x) + 9px);
   --agv-drop-y-1: calc(var(--agv-start-y) + 8svh);
   --agv-drop-y-2: calc(var(--agv-start-y) + 24svh);
   --agv-drop-y-3: calc(var(--agv-start-y) + 52svh);
@@ -346,6 +350,51 @@ main {
   width: 100%;
 }
 
+.profile-agv-shelf {
+  animation: profileAgvShelfRoute 60s linear infinite;
+  height: calc(var(--agv-size) * 0.98);
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  transform: translate3d(var(--agv-file-x), var(--agv-start-y), 0);
+  width: calc(var(--agv-size) * 0.78);
+  z-index: 0;
+}
+
+.agv-file-icon {
+  display: block;
+  filter: drop-shadow(0 12px 18px color-mix(in srgb, var(--ink) 12%, transparent));
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+}
+
+.agv-file-page {
+  fill: #f8f8f4;
+  stroke: #3e403a;
+  stroke-linejoin: round;
+  stroke-width: 3.4;
+}
+
+.agv-file-fold {
+  fill: none;
+  stroke: #3e403a;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3.4;
+}
+
+.agv-file-label {
+  color: #3e403a;
+  fill: #3e403a;
+  font-family: var(--font-sf-mono);
+  font-size: 8px;
+  font-weight: 760;
+  text-anchor: middle;
+}
+
 .panel-shell::before {
   animation: profileAmbientShift 22s ease-in-out infinite alternate;
   background:
@@ -379,6 +428,11 @@ html[data-theme='dark'] .panel-shell::before {
 }
 
 .profile-panel > .profile-agv-runner {
+  position: fixed;
+  z-index: 0;
+}
+
+.profile-panel > .profile-agv-shelf {
   position: fixed;
   z-index: 0;
 }
@@ -537,7 +591,7 @@ h3 {
   gap: 3px;
   font-family: var(--font-sf-compact);
   font-size: 18px;
-  font-weight: 760;
+  font-weight: 500;
   line-height: 1.5;
   margin-top: 26px;
   max-width: 780px;
@@ -561,8 +615,8 @@ h3 {
 
 .hero-summary {
   color: var(--text);
-  font-family: var(--font-new-york);
-  font-size: 20px;
+  font-family: var(--font-sf-compact);
+  font-size: 14px;
   line-height: 1.65;
   margin-top: 18px;
   max-width: 730px;
@@ -1754,7 +1808,7 @@ a.certification-title {
 }
 
 .atm-neighbour {
-  fill: #c9cfd4;
+  fill: #78828b;
   opacity: 0.96;
 }
 
@@ -1765,7 +1819,7 @@ a.certification-title {
 
 .atm-region,
 .atm-neighbour-territory {
-  fill: #d9d9d9;
+  fill: #aeb5bb;
   opacity: 1;
   stroke: none;
 }
@@ -1778,7 +1832,7 @@ a.certification-title {
 }
 
 .atm-neighbour-territory {
-  fill: #c9cfd4;
+  fill: #78828b;
 }
 
 .atm-coast,
@@ -1828,10 +1882,21 @@ a.certification-title {
   opacity: 0.32;
 }
 
+.atm-sector-group {
+  animation: atmSectorDrift 12s ease-in-out infinite alternate;
+}
+
+.atm-sector-group--wide {
+  animation: atmSectorDrift 12s ease-in-out -4s infinite alternate;
+}
+
+.atm-sector-group--soft {
+  animation: atmSectorDrift 12s ease-in-out -8s infinite alternate;
+}
+
 .atm-sector {
   --regulated-fill: color-mix(in srgb, var(--accent) 18%, transparent);
   --regulated-stroke: color-mix(in srgb, var(--accent) 58%, transparent);
-  animation: atmSectorDrift 12s ease-in-out infinite alternate;
   fill: var(--regulated-fill);
   stroke: var(--regulated-stroke);
   stroke-width: 1.3;
@@ -1839,12 +1904,10 @@ a.certification-title {
 
 .atm-sector--wide {
   --regulated-fill: color-mix(in srgb, var(--accent-secondary) 18%, transparent);
-  animation: atmSectorDrift 12s ease-in-out -4s infinite alternate;
 }
 
 .atm-sector--soft {
   --regulated-fill: color-mix(in srgb, var(--accent) 12%, transparent);
-  animation: atmSectorDrift 12s ease-in-out -8s infinite alternate;
 }
 
 .atm-sector-alert {
@@ -2170,93 +2233,172 @@ button:focus-visible {
     transform: translate3d(var(--agv-start-x), var(--agv-start-y), 0) rotate(90deg);
   }
 
-  7% {
+  3.2% {
+    opacity: 0.92;
+    transform: translate3d(var(--agv-accelerate-x-1), var(--agv-start-y), 0) rotate(90deg);
+  }
+
+  4.8% {
+    opacity: 0.92;
+    transform: translate3d(var(--agv-accelerate-x-2), var(--agv-start-y), 0) rotate(90deg);
+  }
+
+  6.4% {
+    opacity: 0.92;
+    transform: translate3d(var(--agv-accelerate-x-3), var(--agv-start-y), 0) rotate(90deg);
+  }
+
+  8% {
     opacity: 0.92;
     transform: translate3d(var(--agv-cruise-x), var(--agv-start-y), 0) rotate(90deg);
   }
 
-  10% {
+  10.8% {
     opacity: 0.92;
     transform: translate3d(var(--agv-brake-x), var(--agv-start-y), 0) rotate(90deg);
   }
 
-  12.5% {
+  13.2% {
     opacity: 0.92;
     transform: translate3d(var(--agv-near-turn-x), var(--agv-start-y), 0) rotate(90deg);
   }
 
-  15% {
+  15.3% {
     opacity: 0.92;
     transform: translate3d(var(--agv-final-approach-x), var(--agv-start-y), 0) rotate(90deg);
   }
 
-  16.2% {
+  17% {
     opacity: 0.92;
     transform: translate3d(var(--agv-creep-x), var(--agv-start-y), 0) rotate(90deg);
   }
 
-  17% {
+  18.1% {
     opacity: 0.92;
     transform: translate3d(var(--agv-pre-turn-x), var(--agv-start-y), 0) rotate(90deg);
   }
 
-  17.5% {
+  18.9% {
     opacity: 0.92;
     transform: translate3d(var(--agv-turn-x), var(--agv-start-y), 0) rotate(90deg);
   }
 
-  21% {
+  20.1% {
+    opacity: 0.92;
+    transform: translate3d(var(--agv-turn-x), var(--agv-start-y), 0) rotate(122deg);
+  }
+
+  21.1% {
+    opacity: 0.92;
+    transform: translate3d(var(--agv-turn-x), var(--agv-start-y), 0) rotate(158deg);
+  }
+
+  22% {
     opacity: 0.92;
     transform: translate3d(var(--agv-turn-x), var(--agv-start-y), 0) rotate(180deg);
   }
 
-  24% {
+  23.4% {
+    opacity: 0.92;
+    transform: translate3d(var(--agv-turn-x), calc(var(--agv-start-y) + 2svh), 0) rotate(180deg);
+  }
+
+  25% {
     opacity: 0.92;
     transform: translate3d(var(--agv-turn-x), var(--agv-drop-y-1), 0) rotate(180deg);
   }
 
-  27% {
+  28% {
     opacity: 0.92;
     transform: translate3d(var(--agv-turn-x), var(--agv-drop-y-2), 0) rotate(180deg);
   }
 
-  30% {
+  31% {
     opacity: 0.92;
     transform: translate3d(var(--agv-turn-x), var(--agv-drop-y-3), 0) rotate(180deg);
   }
 
-  33% {
+  34% {
     opacity: 0.92;
     transform: translate3d(var(--agv-turn-x), var(--agv-exit-y), 0) rotate(180deg);
   }
 
-  35%,
+  36%,
   100% {
     opacity: 0;
     transform: translate3d(var(--agv-turn-x), var(--agv-exit-y), 0) rotate(180deg);
   }
 }
 
+@keyframes profileAgvShelfRoute {
+  0%,
+  18.8% {
+    opacity: 0.86;
+    transform: translate3d(var(--agv-file-x), var(--agv-start-y), 0);
+  }
+
+  20.1% {
+    opacity: 0.9;
+    transform: translate3d(var(--agv-file-x), var(--agv-start-y), 0) rotate(4deg);
+  }
+
+  22% {
+    opacity: 0.9;
+    transform: translate3d(var(--agv-file-x), var(--agv-start-y), 0);
+  }
+
+  23.4% {
+    opacity: 0.9;
+    transform: translate3d(var(--agv-file-x), calc(var(--agv-start-y) + 2svh), 0);
+  }
+
+  25% {
+    opacity: 0.9;
+    transform: translate3d(var(--agv-file-x), var(--agv-drop-y-1), 0);
+  }
+
+  28% {
+    opacity: 0.9;
+    transform: translate3d(var(--agv-file-x), var(--agv-drop-y-2), 0);
+  }
+
+  31% {
+    opacity: 0.9;
+    transform: translate3d(var(--agv-file-x), var(--agv-drop-y-3), 0);
+  }
+
+  34% {
+    opacity: 0.9;
+    transform: translate3d(var(--agv-file-x), var(--agv-exit-y), 0);
+  }
+
+  36%,
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--agv-file-x), var(--agv-exit-y), 0);
+  }
+}
+
 @keyframes agvTurnPulse {
   0%,
-  16%,
-  22%,
+  18.5%,
+  23.5%,
   100% {
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.64);
   }
 
-  17% {
+  19.4% {
     opacity: 0.48;
     transform: translate(-50%, -50%) scale(0.72);
   }
 
-  19% {
+  21% {
     opacity: 0.34;
     transform: translate(-50%, -50%) scale(1);
   }
 
-  21% {
+  22.7% {
     opacity: 0.18;
     transform: translate(-50%, -50%) scale(1.18);
   }
@@ -2369,11 +2511,13 @@ button:focus-visible {
   .topbar::before,
   .panel-shell::before,
   .profile-agv-runner,
+  .profile-agv-shelf,
   .contact-atm-backdrop * {
     animation: none;
   }
 
-  .profile-agv-runner {
+  .profile-agv-runner,
+  .profile-agv-shelf {
     display: none;
   }
 }
@@ -2398,13 +2542,13 @@ button:focus-visible {
   }
 
   .brand {
-    height: 38px;
-    width: 38px;
+    height: 44px;
+    width: 44px;
   }
 
   .brand-logo {
-    height: 31px;
-    width: 31px;
+    height: 37px;
+    width: 37px;
   }
 
   .nav-links {
@@ -2419,6 +2563,7 @@ button:focus-visible {
 
   .nav-links::before,
   .profile-agv-runner,
+  .profile-agv-shelf,
   .contact-atm-backdrop {
     display: none;
   }
@@ -2459,6 +2604,9 @@ button:focus-visible {
     --agv-size: 58px;
     --agv-start-x: calc((var(--agv-size) * -1) - 28px);
     --agv-start-y: 68px;
+    --agv-accelerate-x-1: 12vw;
+    --agv-accelerate-x-2: 28vw;
+    --agv-accelerate-x-3: 44vw;
     --agv-cruise-x: 52vw;
     --agv-brake-x: 62vw;
     --agv-near-turn-x: 70vw;
@@ -2466,6 +2614,7 @@ button:focus-visible {
     --agv-creep-x: 78vw;
     --agv-pre-turn-x: 80vw;
     --agv-turn-x: calc(100vw - var(--agv-size) - 54px);
+    --agv-file-x: calc(var(--agv-turn-x) + 6px);
     --agv-drop-y-1: calc(var(--agv-start-y) + 8svh);
     --agv-drop-y-2: calc(var(--agv-start-y) + 24svh);
     --agv-drop-y-3: calc(var(--agv-start-y) + 52svh);
@@ -2582,7 +2731,7 @@ button:focus-visible {
 
   .hero-summary,
   .text-stack {
-    font-size: 18px;
+    font-size: 14px;
   }
 
   .section,
