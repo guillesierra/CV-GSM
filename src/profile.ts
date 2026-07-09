@@ -809,7 +809,6 @@ export const profile = {
       ...projectImages.aom,
       visual: 'energy-grid',
       tags: ['Smart grid', 'AOM', 'Real-time'],
-      previewVideo: 'https://cdn.pixabay.com/video/2025/03/24/267120_large.mp4',
     },
     {
       title: {
