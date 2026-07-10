@@ -758,16 +758,6 @@ function App() {
             id="panel-profile"
             role="tabpanel"
           >
-            <span className="profile-agv-runner" aria-hidden="true">
-              <img src={`${import.meta.env.BASE_URL}agv-runner.png`} alt="" />
-            </span>
-            <span className="profile-agv-shelf" aria-hidden="true">
-              <svg className="agv-file-icon" viewBox="0 0 64 78">
-                <path className="agv-file-page" d="M5 5 H41 L59 23 V73 H5 Z" />
-                <path className="agv-file-fold" d="M41 5 V23 H59" />
-                <text className="agv-file-label" x="32" y="53">.gitignore</text>
-              </svg>
-            </span>
             <div className="hero-section">
               <div className="hero-copy">
                 <h1 id="hero-title">{profile.hero.title[locale]}</h1>

@@ -287,112 +287,8 @@ main {
 }
 
 .profile-panel {
-  --agv-size: clamp(58px, 5.8vw, 86px);
-  --agv-start-x: calc((var(--agv-size) * -1) - 42px);
-  --agv-start-y: 82px;
-  --agv-accelerate-x-1: 14vw;
-  --agv-accelerate-x-2: 34vw;
-  --agv-accelerate-x-3: 50vw;
-  --agv-cruise-x: 58vw;
-  --agv-brake-x: 70vw;
-  --agv-near-turn-x: 78vw;
-  --agv-final-approach-x: 83vw;
-  --agv-creep-x: 86vw;
-  --agv-pre-turn-x: 88vw;
-  --agv-turn-x: calc(100vw - var(--agv-size) - 132px);
-  --agv-file-x: calc(var(--agv-turn-x) + 9px);
-  --agv-drop-y-1: calc(var(--agv-start-y) + 8svh);
-  --agv-drop-y-2: calc(var(--agv-start-y) + 24svh);
-  --agv-drop-y-3: calc(var(--agv-start-y) + 52svh);
-  --agv-exit-y: calc(100svh + var(--agv-size));
   overflow: visible;
   padding-top: 0;
-}
-
-.profile-agv-runner {
-  animation: profileAgvRoute 60s linear infinite;
-  border-radius: 12px;
-  height: var(--agv-size);
-  left: 0;
-  opacity: 0;
-  pointer-events: none;
-  position: fixed;
-  top: 0;
-  transform: translate3d(var(--agv-start-x), var(--agv-start-y), 0) rotate(90deg);
-  transform-origin: 50% 50%;
-  width: var(--agv-size);
-  z-index: 0;
-}
-
-.profile-agv-runner::before {
-  animation: agvTurnPulse 60s linear infinite;
-  background:
-    radial-gradient(circle, transparent 35%, color-mix(in srgb, var(--accent) 34%, transparent) 36% 38%, transparent 39%),
-    radial-gradient(circle, transparent 52%, color-mix(in srgb, var(--accent-secondary) 24%, transparent) 53% 55%, transparent 56%),
-    radial-gradient(circle, transparent 69%, color-mix(in srgb, var(--accent) 16%, transparent) 70% 72%, transparent 73%);
-  border-radius: 50%;
-  content: "";
-  height: calc(var(--agv-size) * 1.8);
-  left: 50%;
-  opacity: 0;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%) scale(0.64);
-  width: calc(var(--agv-size) * 1.8);
-  z-index: -1;
-}
-
-.profile-agv-runner img {
-  display: block;
-  filter: drop-shadow(0 14px 26px color-mix(in srgb, var(--ink) 20%, transparent));
-  height: 100%;
-  object-fit: contain;
-  width: 100%;
-}
-
-.profile-agv-shelf {
-  animation: profileAgvShelfRoute 60s linear infinite;
-  height: calc(var(--agv-size) * 0.98);
-  left: 0;
-  opacity: 0;
-  pointer-events: none;
-  position: fixed;
-  top: 0;
-  transform: translate3d(var(--agv-file-x), var(--agv-start-y), 0);
-  width: calc(var(--agv-size) * 0.78);
-  z-index: 0;
-}
-
-.agv-file-icon {
-  display: block;
-  filter: drop-shadow(0 12px 18px color-mix(in srgb, var(--ink) 12%, transparent));
-  height: 100%;
-  overflow: hidden;
-  width: 100%;
-}
-
-.agv-file-page {
-  fill: #f8f8f4;
-  stroke: #3e403a;
-  stroke-linejoin: round;
-  stroke-width: 3.4;
-}
-
-.agv-file-fold {
-  fill: none;
-  stroke: #3e403a;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 3.4;
-}
-
-.agv-file-label {
-  color: #3e403a;
-  fill: #3e403a;
-  font-family: var(--font-sf-mono);
-  font-size: 8px;
-  font-weight: 760;
-  text-anchor: middle;
 }
 
 .panel-shell::before {
@@ -425,16 +321,6 @@ html[data-theme='dark'] .panel-shell::before {
 .panel-shell > * {
   position: relative;
   z-index: 1;
-}
-
-.profile-panel > .profile-agv-runner {
-  position: fixed;
-  z-index: 0;
-}
-
-.profile-panel > .profile-agv-shelf {
-  position: fixed;
-  z-index: 0;
 }
 
 .panel-heading {
@@ -2233,189 +2119,6 @@ button:focus-visible {
   }
 }
 
-@keyframes profileAgvRoute {
-  0%,
-  1% {
-    opacity: 0;
-    transform: translate3d(var(--agv-start-x), var(--agv-start-y), 0) rotate(90deg);
-  }
-
-  2% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-start-x), var(--agv-start-y), 0) rotate(90deg);
-  }
-
-  3.2% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-accelerate-x-1), var(--agv-start-y), 0) rotate(90deg);
-  }
-
-  4.8% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-accelerate-x-2), var(--agv-start-y), 0) rotate(90deg);
-  }
-
-  6.4% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-accelerate-x-3), var(--agv-start-y), 0) rotate(90deg);
-  }
-
-  8% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-cruise-x), var(--agv-start-y), 0) rotate(90deg);
-  }
-
-  10.8% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-brake-x), var(--agv-start-y), 0) rotate(90deg);
-  }
-
-  13.2% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-near-turn-x), var(--agv-start-y), 0) rotate(90deg);
-  }
-
-  15.3% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-final-approach-x), var(--agv-start-y), 0) rotate(90deg);
-  }
-
-  17% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-creep-x), var(--agv-start-y), 0) rotate(90deg);
-  }
-
-  18.1% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-pre-turn-x), var(--agv-start-y), 0) rotate(90deg);
-  }
-
-  18.9% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-turn-x), var(--agv-start-y), 0) rotate(90deg);
-  }
-
-  20.1% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-turn-x), var(--agv-start-y), 0) rotate(122deg);
-  }
-
-  21.1% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-turn-x), var(--agv-start-y), 0) rotate(158deg);
-  }
-
-  22% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-turn-x), var(--agv-start-y), 0) rotate(180deg);
-  }
-
-  23.4% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-turn-x), calc(var(--agv-start-y) + 2svh), 0) rotate(180deg);
-  }
-
-  25% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-turn-x), var(--agv-drop-y-1), 0) rotate(180deg);
-  }
-
-  28% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-turn-x), var(--agv-drop-y-2), 0) rotate(180deg);
-  }
-
-  31% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-turn-x), var(--agv-drop-y-3), 0) rotate(180deg);
-  }
-
-  34% {
-    opacity: 0.92;
-    transform: translate3d(var(--agv-turn-x), var(--agv-exit-y), 0) rotate(180deg);
-  }
-
-  36%,
-  100% {
-    opacity: 0;
-    transform: translate3d(var(--agv-turn-x), var(--agv-exit-y), 0) rotate(180deg);
-  }
-}
-
-@keyframes profileAgvShelfRoute {
-  0%,
-  18.8% {
-    opacity: 0.86;
-    transform: translate3d(var(--agv-file-x), var(--agv-start-y), 0);
-  }
-
-  20.1% {
-    opacity: 0.9;
-    transform: translate3d(var(--agv-file-x), var(--agv-start-y), 0) rotate(4deg);
-  }
-
-  22% {
-    opacity: 0.9;
-    transform: translate3d(var(--agv-file-x), var(--agv-start-y), 0);
-  }
-
-  23.4% {
-    opacity: 0.9;
-    transform: translate3d(var(--agv-file-x), calc(var(--agv-start-y) + 2svh), 0);
-  }
-
-  25% {
-    opacity: 0.9;
-    transform: translate3d(var(--agv-file-x), var(--agv-drop-y-1), 0);
-  }
-
-  28% {
-    opacity: 0.9;
-    transform: translate3d(var(--agv-file-x), var(--agv-drop-y-2), 0);
-  }
-
-  31% {
-    opacity: 0.9;
-    transform: translate3d(var(--agv-file-x), var(--agv-drop-y-3), 0);
-  }
-
-  34% {
-    opacity: 0.9;
-    transform: translate3d(var(--agv-file-x), var(--agv-exit-y), 0);
-  }
-
-  36%,
-  100% {
-    opacity: 0;
-    transform: translate3d(var(--agv-file-x), var(--agv-exit-y), 0);
-  }
-}
-
-@keyframes agvTurnPulse {
-  0%,
-  18.5%,
-  23.5%,
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.64);
-  }
-
-  19.4% {
-    opacity: 0.48;
-    transform: translate(-50%, -50%) scale(0.72);
-  }
-
-  21% {
-    opacity: 0.34;
-    transform: translate(-50%, -50%) scale(1);
-  }
-
-  22.7% {
-    opacity: 0.18;
-    transform: translate(-50%, -50%) scale(1.18);
-  }
-}
-
 @keyframes atmRoutePulse {
   0% {
     stroke-dashoffset: 0;
@@ -2522,15 +2225,8 @@ button:focus-visible {
 
   .topbar::before,
   .panel-shell::before,
-  .profile-agv-runner,
-  .profile-agv-shelf,
   .contact-atm-backdrop * {
     animation: none;
-  }
-
-  .profile-agv-runner,
-  .profile-agv-shelf {
-    display: none;
   }
 }
 
@@ -2574,8 +2270,6 @@ button:focus-visible {
   }
 
   .nav-links::before,
-  .profile-agv-runner,
-  .profile-agv-shelf,
   .contact-atm-backdrop {
     display: none;
   }
@@ -2613,24 +2307,6 @@ button:focus-visible {
   }
 
   .profile-panel {
-    --agv-size: 58px;
-    --agv-start-x: calc((var(--agv-size) * -1) - 28px);
-    --agv-start-y: 68px;
-    --agv-accelerate-x-1: 12vw;
-    --agv-accelerate-x-2: 28vw;
-    --agv-accelerate-x-3: 44vw;
-    --agv-cruise-x: 52vw;
-    --agv-brake-x: 62vw;
-    --agv-near-turn-x: 70vw;
-    --agv-final-approach-x: 75vw;
-    --agv-creep-x: 78vw;
-    --agv-pre-turn-x: 80vw;
-    --agv-turn-x: calc(100vw - var(--agv-size) - 54px);
-    --agv-file-x: calc(var(--agv-turn-x) + 6px);
-    --agv-drop-y-1: calc(var(--agv-start-y) + 8svh);
-    --agv-drop-y-2: calc(var(--agv-start-y) + 24svh);
-    --agv-drop-y-3: calc(var(--agv-start-y) + 52svh);
-    --agv-exit-y: calc(100svh + var(--agv-size));
     padding-top: 0;
   }
 
@@ -2660,10 +2336,6 @@ button:focus-visible {
     gap: 26px;
     min-height: auto;
     padding-top: 46px;
-  }
-
-  .profile-agv-runner {
-    width: var(--agv-size);
   }
 
   h1 {
