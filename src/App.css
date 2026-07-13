@@ -280,6 +280,7 @@ main {
 }
 
 .panel-shell {
+  animation: panelEnter 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
   isolation: isolate;
   min-height: calc(100svh - 72px);
   padding: 54px 0 70px;
@@ -409,12 +410,409 @@ html[data-theme='dark'] .panel-shell::before {
   display: grid;
   gap: 38px;
   grid-template-columns: minmax(0, 1fr) 300px;
-  min-height: calc(100svh - 96px);
+  isolation: isolate;
+  min-height: calc(100svh - 132px);
   padding: 64px 0 34px;
+  position: relative;
+}
+
+.industrial-hero-scene {
+  bottom: 0;
+  left: 50%;
+  mask-image: linear-gradient(to bottom, #000 0%, #000 82%, transparent 100%);
+  opacity: 0.72;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  width: 100vw;
+  z-index: 0;
+}
+
+.industrial-hero-svg {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.industrial-grid {
+  opacity: 0.22;
+}
+
+.industrial-grid-line {
+  fill: none;
+  stroke: color-mix(in srgb, var(--accent-secondary) 18%, var(--line));
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.industrial-bus,
+.industrial-signal,
+.industrial-drop {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.industrial-bus-group--events {
+  color: #64d2ff;
+}
+
+.industrial-bus-group--energy {
+  color: #ffd35c;
+}
+
+.industrial-bus-group--field {
+  color: #55d6a4;
+}
+
+.industrial-bus-group--services {
+  color: #91a7ff;
+}
+
+.industrial-bus {
+  opacity: 0.3;
+  stroke: currentColor;
+  stroke-width: 1.4;
+}
+
+.industrial-bus--events {
+  stroke-dasharray: 5 8;
+}
+
+.industrial-bus--energy {
+  stroke-width: 1.7;
+}
+
+.industrial-bus--energy-return {
+  opacity: 0.15;
+  stroke-width: 1;
+}
+
+.industrial-bus--field {
+  stroke-dasharray: 2 6;
+}
+
+.industrial-bus--services {
+  stroke-dasharray: 18 7 3 7;
+}
+
+.industrial-bus-terminal {
+  fill: currentColor;
+  opacity: 0.72;
+}
+
+.industrial-bus-label {
+  fill: currentColor;
+  font-family: var(--font-sf-mono);
+  font-size: 9px;
+  font-weight: 760;
+  letter-spacing: 0;
+  opacity: 0.66;
+}
+
+.industrial-signal {
+  animation: industrialSignalFlow var(--signal-duration, 5.4s) linear infinite;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 2.4;
+}
+
+.industrial-signal--events {
+  --signal-duration: 3.8s;
+  animation-delay: -1s;
+  stroke-dasharray: 5 92;
+}
+
+.industrial-signal--energy {
+  --signal-duration: 5.6s;
+  animation-delay: -2.2s;
+  stroke-dasharray: 18 154;
+}
+
+.industrial-signal--field {
+  --signal-duration: 4.8s;
+  animation-delay: -3.4s;
+  stroke-dasharray: 2 72;
+}
+
+.industrial-signal--services {
+  --signal-duration: 6.2s;
+  animation-delay: -4.6s;
+  stroke-dasharray: 28 176;
+}
+
+.industrial-drop {
+  animation: industrialDropSignal 3.6s linear infinite;
+  opacity: 0.42;
+  stroke-dasharray: 4 7;
+  stroke-width: 1.2;
+}
+
+.industrial-drop--events {
+  stroke: #64d2ff;
+}
+
+.industrial-drop--energy {
+  animation-delay: -0.9s;
+  stroke: #ffd35c;
+}
+
+.industrial-drop--field {
+  animation-delay: -1.8s;
+  stroke: #55d6a4;
+}
+
+.industrial-drop--services {
+  animation-delay: -2.4s;
+  stroke: #91a7ff;
+}
+
+.industrial-drop--control {
+  animation-delay: -2.7s;
+  opacity: 0.26;
+  stroke: color-mix(in srgb, var(--accent) 70%, var(--accent-secondary));
+}
+
+.industrial-hub,
+.industrial-node {
+  color: color-mix(in srgb, var(--accent) 72%, var(--accent-secondary));
+}
+
+.industrial-hub-ring,
+.industrial-node-ring {
+  fill: color-mix(in srgb, var(--surface-elevated) 30%, transparent);
+  stroke: currentColor;
+  vector-effect: non-scaling-stroke;
+}
+
+.industrial-hub-ring {
+  animation: industrialHubPulse 4.6s ease-in-out infinite;
+  opacity: 0.36;
+  stroke-width: 1.5;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.industrial-hub-ring--inner {
+  animation-delay: -2.3s;
+  opacity: 0.64;
+}
+
+.industrial-node-ring {
+  opacity: 0.7;
+  stroke-width: 1.4;
+}
+
+.industrial-hub-icon,
+.industrial-node-icon {
+  color: inherit;
+  fill: none;
+  overflow: visible;
+  stroke: currentColor;
+}
+
+.industrial-hub-icon {
+  opacity: 0.88;
+}
+
+.industrial-node-icon {
+  opacity: 0.92;
+}
+
+.industrial-node-status {
+  animation: industrialNodePulse 2.8s ease-in-out infinite;
+  fill: currentColor;
+  filter: drop-shadow(0 0 4px currentColor);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.industrial-node--real-time {
+  color: #64d2ff;
+}
+
+.industrial-node--energy {
+  color: #ffd35c;
+}
+
+.industrial-node--robotics {
+  color: #55d6a4;
+}
+
+.industrial-node--atm {
+  color: #91a7ff;
+}
+
+.industrial-node--energy .industrial-node-status {
+  animation-delay: -0.7s;
+}
+
+.industrial-node--robotics .industrial-node-status {
+  animation-delay: -1.4s;
+}
+
+.industrial-node--atm .industrial-node-status {
+  animation-delay: -2.1s;
+}
+
+.industrial-hub-label,
+.industrial-node-label,
+.industrial-node-protocol {
+  fill: color-mix(in srgb, var(--ink) 42%, var(--accent));
+  font-family: var(--font-sf-mono);
+  font-weight: 760;
+  letter-spacing: 0;
+  text-anchor: middle;
+}
+
+.industrial-hub-label {
+  font-size: 13px;
+}
+
+.industrial-node-label {
+  fill: currentColor;
+  font-size: 11px;
+}
+
+.industrial-node-protocol {
+  fill: color-mix(in srgb, currentColor 68%, var(--muted));
+  font-size: 8px;
+  font-weight: 650;
+  opacity: 0.72;
+}
+
+.hero-section > .hero-copy,
+.hero-section > .identity-panel {
+  position: relative;
+  z-index: 1;
 }
 
 .hero-copy {
   max-width: 790px;
+}
+
+.hero-title-word {
+  animation: heroWordReveal 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(80ms + var(--word-index) * 52ms);
+  display: inline-block;
+  will-change: opacity, transform;
+}
+
+.hero-title-word:not(:last-child) {
+  margin-right: 0.22em;
+}
+
+.hero-copy .role-line,
+.hero-copy .hero-summary,
+.hero-copy .hero-actions {
+  animation: heroContentReveal 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-copy .role-line {
+  animation-delay: 680ms;
+}
+
+.hero-copy .hero-summary {
+  animation-delay: 780ms;
+}
+
+.hero-copy .hero-actions {
+  animation-delay: 880ms;
+}
+
+.profile-panel .identity-panel {
+  animation: heroIdentityReveal 860ms cubic-bezier(0.22, 1, 0.36, 1) 520ms both;
+  backdrop-filter: blur(26px) saturate(145%);
+  background:
+    linear-gradient(145deg, color-mix(in srgb, #ffffff 9%, transparent), transparent 48%),
+    color-mix(in srgb, var(--surface) 74%, transparent);
+}
+
+.profile-panel .identity-panel:hover {
+  transform: translateY(-4px) scale(1.01);
+}
+
+@keyframes panelEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroWordReveal {
+  from {
+    filter: blur(7px);
+    opacity: 0;
+    transform: translateY(22px) scale(0.985);
+  }
+  to {
+    filter: blur(0);
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes heroContentReveal {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroIdentityReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes industrialSignalFlow {
+  to {
+    stroke-dashoffset: -360;
+  }
+}
+
+@keyframes industrialDropSignal {
+  to {
+    stroke-dashoffset: -44;
+  }
+}
+
+@keyframes industrialHubPulse {
+  0%,
+  100% {
+    opacity: 0.28;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 0.68;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes industrialNodePulse {
+  0%,
+  100% {
+    opacity: 0.58;
+    transform: scale(0.84);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.22);
+  }
 }
 
 .eyebrow,
@@ -1641,14 +2039,14 @@ a.certification-title {
 .contact-section {
   background: var(--surface-elevated);
   border: 1px solid var(--line);
-  border-radius: 18px;
+  border-radius: 16px;
   box-shadow: var(--shadow);
   color: var(--text);
-  margin: 0 auto;
-  max-width: 620px;
+  margin: 0;
+  max-width: 480px;
   min-height: auto;
   overflow: hidden;
-  padding: 36px 40px;
+  padding: 24px 26px;
   position: relative;
   transition:
     border-color 220ms ease,
@@ -1660,19 +2058,20 @@ a.certification-title {
   align-items: start;
   display: grid;
   height: calc(100svh - 72px);
+  justify-items: end;
   margin-left: calc(-50vw + 50%);
   margin-right: calc(-50vw + 50%);
   margin-bottom: -64px;
   min-height: calc(100svh - 72px);
   overflow: hidden;
-  padding: 30px 28px 0;
+  padding: 30px clamp(30px, 6vw, 96px) 0 28px;
 }
 
 .contact-atm-backdrop {
-  background: #031022;
+  background: #020b17;
   height: 100svh;
   inset: 0;
-  opacity: 0.72;
+  opacity: 0.88;
   pointer-events: none;
   position: fixed;
   width: 100vw;
@@ -1682,146 +2081,246 @@ a.certification-title {
 .contact-atm-map {
   display: block;
   height: 100%;
+  max-width: none;
   min-height: 100svh;
-  transform: translateY(26%) scale(1.08);
-  transform-origin: center top;
-  width: 100%;
+  transform: translateY(-2%) scale(1.12, 1.04);
+  transform-origin: center center;
+  width: 100vw;
 }
 
 .atm-sea {
-  fill: #000f24;
-  opacity: 1;
+  fill: #020b17;
 }
 
-.atm-neighbour {
-  fill: #78828b;
-  opacity: 0.96;
+.atm-grid {
+  color: #5ea7c8;
+  opacity: 0.075;
 }
 
-.atm-region-svg {
-  display: block;
-  overflow: visible;
+.atm-neighbouring-land {
+  filter: drop-shadow(0 -8px 18px rgb(0 0 0 / 0.22));
 }
 
-.atm-region,
-.atm-neighbour-territory {
-  fill: #aeb5bb;
-  opacity: 1;
+.atm-neighbour-land {
+  fill: #162832;
   stroke: none;
 }
 
+.atm-neighbour-boundary,
+.atm-neighbour-contour {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.atm-neighbour-boundary {
+  opacity: 0.48;
+  stroke: #7394a0;
+  stroke-dasharray: 7 9;
+  stroke-width: 1;
+}
+
+.atm-neighbour-contour {
+  opacity: 0.18;
+  stroke: #a7c5bd;
+  stroke-width: 1.2;
+}
+
+.atm-neighbour-label {
+  fill: #8eabb5;
+  font-family: var(--font-sf-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0;
+  opacity: 0.52;
+}
+
+.atm-land-layer {
+  filter: drop-shadow(0 18px 22px rgb(0 0 0 / 0.3));
+}
+
 .atm-region {
-  stroke: color-mix(in srgb, #ffffff 78%, transparent);
+  fill: url("#atm-land-gradient");
+  stroke: none;
+}
+
+.atm-coastline {
+  fill: none;
+  stroke: #9adcf3;
+  stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 2.8px;
+  stroke-width: 2.2;
   vector-effect: non-scaling-stroke;
 }
 
-.atm-neighbour-territory {
-  fill: #78828b;
+.atm-land-detail {
+  opacity: 0.72;
 }
 
-.atm-coast,
-.atm-boundary,
 .atm-terrain,
+.atm-municipality-line,
 .atm-route,
-.atm-ring {
+.atm-approach-line {
   fill: none;
-  stroke: color-mix(in srgb, var(--accent-secondary) 54%, transparent);
   stroke-linecap: round;
-  stroke-width: 1.4;
-}
-
-.atm-coast {
-  stroke: color-mix(in srgb, #ffffff 68%, var(--accent-secondary));
-  stroke-width: 2;
-}
-
-.atm-boundary {
-  opacity: 0.34;
-  stroke: color-mix(in srgb, #ffffff 36%, var(--accent));
-  stroke-dasharray: 10 12;
 }
 
 .atm-terrain {
-  opacity: 0.18;
-  stroke: color-mix(in srgb, var(--accent-secondary) 48%, #ffffff);
+  stroke: #85b59f;
+  stroke-width: 1.4;
+}
+
+.atm-terrain--ridge {
+  opacity: 0.82;
+  stroke: #b0c992;
+  stroke-width: 2;
+}
+
+.atm-municipality-line {
+  opacity: 0.36;
+  stroke: #b8d7dc;
+  stroke-dasharray: 5 8;
   stroke-width: 1;
 }
 
 .atm-route {
   animation: atmRoutePulse 5.8s linear infinite;
-  stroke: color-mix(in srgb, #4f8df7 72%, #ffffff);
-  stroke-dasharray: 18 20;
+  fill: none;
+  opacity: 0.86;
+  stroke: #7fc7ff;
+  stroke-dasharray: 12 16;
+  stroke-linecap: round;
+  stroke-width: 1.5;
 }
 
 .atm-route--secondary {
   animation-delay: -2.2s;
-  opacity: 0.58;
+  opacity: 0.44;
 }
 
-.atm-ring {
-  opacity: 0.42;
+.atm-route-fixes circle {
+  fill: #d8f5ff;
+  filter: drop-shadow(0 0 5px rgb(109 207 246 / 0.72));
+  opacity: 0.74;
+  stroke: #0f4d6d;
+  stroke-width: 2;
 }
 
-.atm-ring--small {
-  opacity: 0.32;
-}
-
-.atm-sector-group {
-  animation: atmSectorDrift 12s ease-in-out infinite alternate;
-}
-
-.atm-sector-group--wide {
-  animation: atmSectorDrift 12s ease-in-out -4s infinite alternate;
-}
-
-.atm-sector-group--soft {
-  animation: atmSectorDrift 12s ease-in-out -8s infinite alternate;
+.atm-sectors {
+  mix-blend-mode: screen;
 }
 
 .atm-sector {
-  --regulated-fill: color-mix(in srgb, var(--accent) 18%, transparent);
-  --regulated-stroke: color-mix(in srgb, var(--accent) 58%, transparent);
-  fill: var(--regulated-fill);
-  stroke: var(--regulated-stroke);
-  stroke-width: 1.3;
+  fill: rgb(38 121 169 / 0.08);
+  stroke: rgb(110 204 241 / 0.34);
+  stroke-dasharray: 9 8;
+  stroke-linejoin: round;
+  stroke-width: 1.2;
 }
 
-.atm-sector--wide {
-  --regulated-fill: color-mix(in srgb, var(--accent-secondary) 18%, transparent);
+.atm-sector--central {
+  fill: rgb(56 173 153 / 0.09);
+  stroke: rgb(107 222 202 / 0.38);
 }
 
-.atm-sector--soft {
-  --regulated-fill: color-mix(in srgb, var(--accent) 12%, transparent);
+.atm-sector--east {
+  fill: rgb(96 118 190 / 0.08);
+  stroke: rgb(155 171 235 / 0.34);
 }
 
-.atm-sector-alert {
-  fill: color-mix(in srgb, #ffd84d 42%, transparent);
-  filter: drop-shadow(0 0 10px color-mix(in srgb, #ffd84d 42%, transparent));
+.atm-sector-activity {
+  --traffic-cycle: 17s;
+  animation-duration: var(--traffic-cycle);
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  fill: rgb(255 206 88 / 0.24);
+  filter: drop-shadow(0 0 10px rgb(255 210 92 / 0.38));
   opacity: 0;
   pointer-events: none;
-  stroke: color-mix(in srgb, #ffd84d 82%, #ffffff);
+  stroke: rgb(255 224 142 / 0.76);
   stroke-linejoin: round;
-  stroke-width: 1.8;
+  stroke-width: 1.6;
 }
 
-.atm-sector-alert--ryr-left {
-  animation: atmTrafficAlertRyrLeft 21s linear infinite;
+.atm-sector-activity--one {
+  --traffic-cycle: 17s;
 }
 
-.atm-sector-alert--ryr-wide {
-  animation: atmTrafficAlertRyrWide 21s linear infinite;
+.atm-sector-activity--two {
+  --traffic-cycle: 21s;
 }
 
-.atm-sector-alert--ibe-wide {
-  animation: atmTrafficAlertIbeWide 17s linear infinite;
+.atm-sector-activity--three {
+  --traffic-cycle: 19s;
 }
 
-.atm-city circle {
-  fill: var(--accent);
-  stroke: color-mix(in srgb, #ffffff 70%, transparent);
-  stroke-width: 2;
+.atm-sector-activity--west {
+  animation-name: atmZoneWestPass;
+}
+
+.atm-sector-activity--central {
+  animation-name: atmZoneCentralPass;
+}
+
+.atm-sector-activity--east {
+  animation-name: atmZoneEastPass;
+}
+
+.atm-sector-label,
+.atm-sea-label,
+.atm-ctr-label,
+.atm-compass text {
+  fill: #b8dce9;
+  font-family: var(--font-sf-mono);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.atm-sector-label {
+  font-size: 10px;
+  opacity: 0.5;
+}
+
+.atm-sea-label {
+  font-size: 15px;
+  font-style: italic;
+  font-weight: 500;
+  opacity: 0.48;
+}
+
+.atm-ctr-ring {
+  fill: none;
+  opacity: 0.62;
+  stroke: #7fc7ff;
+  stroke-dasharray: 5 7;
+  stroke-width: 1.4;
+}
+
+.atm-ctr-ring--inner {
+  opacity: 0.42;
+  stroke-dasharray: 2 6;
+}
+
+.atm-ctr-label {
+  font-size: 10px;
+  opacity: 0.72;
+}
+
+.atm-approach-line {
+  opacity: 0.46;
+  stroke: #c4ecff;
+  stroke-dasharray: 16 9 3 9;
+  stroke-width: 1.2;
+}
+
+.atm-city-ring {
+  fill: rgb(8 32 46 / 0.76);
+  stroke: #a8e9ff;
+  stroke-width: 1.4;
+}
+
+.atm-city-core {
+  fill: #f4fbff;
+  stroke: none;
 }
 
 .atm-city text,
@@ -1829,43 +2328,109 @@ a.certification-title {
 .atm-plane text {
   fill: #ffffff;
   font-family: var(--font-sf-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.atm-city--capital text {
   font-size: 14px;
-  font-weight: 760;
+  font-weight: 800;
+}
+
+.atm-city--minor {
+  opacity: 0.72;
+}
+
+.atm-city--minor text {
+  font-size: 10px;
 }
 
 .atm-airport {
-  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--accent) 38%, transparent));
+  filter: drop-shadow(0 0 10px rgb(93 204 255 / 0.42));
 }
 
 .atm-airport-marker {
-  fill: color-mix(in srgb, var(--accent) 20%, transparent);
-  stroke: color-mix(in srgb, #ffffff 68%, var(--accent));
-  stroke-width: 2;
+  fill: rgb(21 99 132 / 0.13);
+  stroke: #9de2ff;
+  stroke-width: 1.5;
 }
 
-.atm-airport-icon {
+.atm-airport-marker--outer {
+  fill: none;
+  opacity: 0.48;
+  stroke-dasharray: 3 6;
+}
+
+.atm-runway-strip {
+  fill: #07111a;
+  stroke: url("#atm-runway-gradient");
+  stroke-width: 1.5;
+}
+
+.atm-runway-centerline,
+.atm-runway-threshold {
   fill: none;
   stroke: #ffffff;
   stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 2.2;
+}
+
+.atm-runway-centerline {
+  stroke-dasharray: 7 5;
+  stroke-width: 1;
+}
+
+.atm-runway-threshold {
+  stroke-width: 1.2;
+}
+
+.atm-airport-code {
+  font-size: 13px !important;
+  font-weight: 850 !important;
+}
+
+.atm-airport-name,
+.atm-airport-runway {
+  font-size: 9px !important;
+  opacity: 0.76;
+}
+
+.atm-airport-code,
+.atm-airport-name,
+.atm-airport-runway {
+  text-anchor: end;
+}
+
+.atm-compass circle {
+  fill: rgb(5 27 42 / 0.5);
+  stroke: rgb(157 226 255 / 0.56);
+  stroke-width: 1;
+}
+
+.atm-compass path {
+  fill: #e8f8ff;
+}
+
+.atm-compass text {
+  font-size: 11px;
+  text-anchor: middle;
 }
 
 .atm-plane {
   fill: #ffffff;
-  opacity: 0.82;
+  opacity: 0.88;
 }
 
 .atm-plane-frame {
-  fill: color-mix(in srgb, var(--accent) 15%, transparent);
-  stroke: color-mix(in srgb, var(--accent) 86%, #ffffff);
-  stroke-width: 2;
+  fill: rgb(19 91 125 / 0.3);
+  stroke: #8cddff;
+  stroke-width: 1.4;
 }
 
 .atm-plane-trail {
   fill: none;
-  opacity: 0.58;
-  stroke: #ffffff;
+  opacity: 0.42;
+  stroke: #a9e5ff;
   stroke-dasharray: 8 18;
   stroke-linecap: round;
   stroke-width: 1;
@@ -1873,10 +2438,10 @@ a.certification-title {
 
 .atm-plane-symbol {
   dominant-baseline: middle;
-  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 48%, transparent));
+  filter: drop-shadow(0 0 5px rgb(108 207 246 / 0.58));
   font-family: "Segoe UI Symbol", "Arial Unicode MS", var(--font-sf-pro);
   fill: #ffffff;
-  font-size: 100px;
+  font-size: 18px;
   font-weight: 700;
   text-anchor: middle;
 }
@@ -1888,8 +2453,8 @@ a.certification-title {
 .atm-plane-meta {
   dominant-baseline: middle;
   font-size: 7px;
-  font-weight: 620;
-  opacity: 0.82;
+  font-weight: 600;
+  opacity: 0.74;
 }
 
 .atm-plane--one {
@@ -1931,14 +2496,14 @@ a.certification-title {
 
 .contact-section h2 {
   color: var(--ink);
-  font-size: 26px;
-  margin-top: 0;
+  font-size: 24px;
+  margin: 0 0 8px;
 }
 
 .contact-section > p:last-of-type {
-  font-size: 17px;
-  line-height: 1.6;
-  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.45;
+  margin: 0;
   max-width: none;
 }
 
@@ -1976,9 +2541,18 @@ a.certification-title {
 
 .contact-actions {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 22px;
+  flex-wrap: nowrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.contact-actions .primary-link,
+.contact-actions .contact-alt-link {
+  font-size: 14px;
+  gap: 7px;
+  min-height: 40px;
+  padding: 0 14px;
 }
 
 .contact-alt-link {
@@ -1987,6 +2561,7 @@ a.certification-title {
   border: 1px solid color-mix(in srgb, var(--accent-secondary) 28%, var(--line));
   border-radius: 999px;
   color: color-mix(in srgb, var(--accent) 76%, var(--accent-secondary));
+  cursor: pointer;
   font-family: var(--font-sf-compact);
   font-size: 15px;
   font-weight: 780;
@@ -2129,57 +2704,45 @@ button:focus-visible {
   }
 }
 
-@keyframes atmSectorDrift {
-  0% {
-    opacity: 0.44;
-    transform: translate3d(-3px, 2px, 0);
+@keyframes atmZoneWestPass {
+  0%,
+  16%,
+  45%,
+  100% {
+    opacity: 0;
   }
 
-  100% {
-    opacity: 0.66;
-    transform: translate3d(4px, -3px, 0);
+  21%,
+  40% {
+    opacity: 0.56;
   }
 }
 
-@keyframes atmTrafficAlertRyrLeft {
+@keyframes atmZoneCentralPass {
   0%,
-  26%,
+  35%,
+  67%,
+  100% {
+    opacity: 0;
+  }
+
   41%,
-  100% {
-    opacity: 0;
-  }
-
-  29%,
-  38% {
-    opacity: 1;
+  61% {
+    opacity: 0.56;
   }
 }
 
-@keyframes atmTrafficAlertRyrWide {
+@keyframes atmZoneEastPass {
   0%,
-  48%,
-  65%,
+  56%,
+  89%,
   100% {
     opacity: 0;
   }
 
-  51%,
-  62% {
-    opacity: 1;
-  }
-}
-
-@keyframes atmTrafficAlertIbeWide {
-  0%,
-  48%,
-  66%,
-  100% {
-    opacity: 0;
-  }
-
-  51%,
-  63% {
-    opacity: 1;
+  62%,
+  83% {
+    opacity: 0.56;
   }
 }
 
@@ -2195,11 +2758,11 @@ button:focus-visible {
 
 @keyframes atmPlaneTwo {
   0% {
-    transform: translate(-170px, 214px);
+    transform: translate(-170px, 160px);
   }
 
   100% {
-    transform: translate(1370px, 316px);
+    transform: translate(1370px, 300px);
   }
 }
 
@@ -2269,8 +2832,7 @@ button:focus-visible {
     scrollbar-width: none;
   }
 
-  .nav-links::before,
-  .contact-atm-backdrop {
+  .nav-links::before {
     display: none;
   }
 
@@ -2311,14 +2873,54 @@ button:focus-visible {
   }
 
   .contact-panel {
+    align-items: start;
     height: calc(100svh - 60px);
+    justify-items: center;
     margin-bottom: -64px;
     min-height: calc(100svh - 60px);
     padding: 22px 20px 0;
   }
 
+  .contact-atm-backdrop {
+    display: block;
+    opacity: 0.68;
+  }
+
   .contact-atm-map {
-    transform: translateY(16%) scale(1.12);
+    transform: translateY(2%) scale(1.08);
+  }
+
+  .atm-neighbour-label,
+  .atm-sector-label,
+  .atm-city--minor,
+  .atm-plane--two,
+  .atm-plane--three,
+  .atm-sector-activity--two,
+  .atm-sector-activity--three {
+    display: none;
+  }
+
+  .atm-city--capital text,
+  .atm-city--major text {
+    font-size: 22px;
+  }
+
+  .atm-airport-code {
+    font-size: 22px !important;
+  }
+
+  .atm-airport-name,
+  .atm-airport-runway,
+  .atm-ctr-label {
+    font-size: 16px !important;
+  }
+
+  .atm-plane-id {
+    font-size: 18px;
+  }
+
+  .atm-plane-meta {
+    display: none;
   }
 
   .hero-section,
@@ -2336,6 +2938,15 @@ button:focus-visible {
     gap: 26px;
     min-height: auto;
     padding-top: 46px;
+  }
+
+  .industrial-hero-scene {
+    opacity: 0.5;
+  }
+
+  .industrial-bus-label,
+  .industrial-node-protocol {
+    display: none;
   }
 
   h1 {
@@ -2492,8 +3103,19 @@ button:focus-visible {
   }
 
   .contact-section {
-    max-width: none;
-    padding: 28px 20px;
+    margin: 0 auto;
+    max-width: 480px;
+    padding: 20px 18px;
+  }
+
+  .contact-actions {
+    gap: 8px;
+  }
+
+  .contact-actions .primary-link,
+  .contact-actions .contact-alt-link {
+    font-size: 13px;
+    padding: 0 10px;
   }
 
   .terminal-body {

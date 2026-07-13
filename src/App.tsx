@@ -32,6 +32,7 @@ import {
   Moon,
   Network,
   PlayCircle,
+  QrCode,
   Rocket,
   ServerCog,
   ShieldCheck,
@@ -362,6 +363,299 @@ function ProjectImage({ locale, project }: { locale: Locale; project: ProjectIte
   )
 }
 
+function AnimatedHeroTitle({ text }: { text: string }) {
+  const words = text.split(' ')
+
+  return (
+    <h1 id="hero-title">
+      {words.map((word, index) => (
+        <span
+          className="hero-title-word"
+          key={`${word}-${index}`}
+          style={{ '--word-index': index } as CSSProperties}
+        >
+          {word}{index < words.length - 1 ? ' ' : ''}
+        </span>
+      ))}
+    </h1>
+  )
+}
+
+function IndustrialHeroScene({ locale }: { locale: Locale }) {
+  const labels = locale === 'es'
+    ? {
+        atm: 'TR\u00c1FICO A\u00c9REO',
+        energy: 'ENERG\u00cdA',
+        eventsBus: 'BUS DE EVENTOS',
+        fieldBus: 'BUS DE CAMPO',
+        realTime: 'TIEMPO REAL',
+        robotics: 'ROB\u00d3TICA',
+        serviceBus: 'BUS DE SERVICIOS',
+        telemetry: 'NATS \u00b7 TELEMETR\u00cdA',
+      }
+    : {
+        atm: 'AIR TRAFFIC',
+        energy: 'ENERGY',
+        eventsBus: 'EVENT BUS',
+        fieldBus: 'FIELD BUS',
+        realTime: 'REAL-TIME',
+        robotics: 'ROBOTICS',
+        serviceBus: 'SERVICE BUS',
+        telemetry: 'NATS \u00b7 TELEMETRY',
+      }
+
+  const nodes = [
+    { icon: TimerReset, key: 'real-time', label: labels.realTime, protocol: labels.telemetry, x: 850, y: 150 },
+    { icon: UtilityPole, key: 'energy', label: labels.energy, protocol: 'ICCP \u00b7 SCADA', x: 990, y: 220 },
+    { icon: Bot, key: 'robotics', label: labels.robotics, protocol: 'OPC-UA \u00b7 CANopen', x: 900, y: 592 },
+    { icon: TowerControl, key: 'atm', label: labels.atm, protocol: 'gRPC \u00b7 AMQP', x: 1368, y: 62 },
+  ]
+
+  const buses = [
+    { className: 'events', label: labels.eventsBus, y: 250 },
+    { className: 'energy', label: 'ICCP / SCADA', y: 330 },
+    { className: 'field', label: labels.fieldBus, y: 450 },
+    { className: 'services', label: labels.serviceBus, y: 520 },
+  ]
+
+  return (
+    <div className="industrial-hero-scene" aria-hidden="true">
+      <svg className="industrial-hero-svg" viewBox="0 0 1440 760" preserveAspectRatio="xMidYMid slice" focusable="false">
+        <defs>
+          <pattern id="hero-grid-pattern" width="48" height="48" patternUnits="userSpaceOnUse">
+            <path d="M48 0 H0 V48" className="industrial-grid-line" />
+          </pattern>
+          <linearGradient id="hero-signal-gradient" x1="0" x2="1">
+            <stop offset="0" stopColor="var(--accent-secondary)" />
+            <stop offset="1" stopColor="var(--accent)" />
+          </linearGradient>
+        </defs>
+
+        <rect className="industrial-grid" width="1440" height="760" fill="url(#hero-grid-pattern)" />
+        <g className="industrial-network">
+          <g className="industrial-buses">
+            {buses.map((bus) => (
+              <g className={`industrial-bus-group industrial-bus-group--${bus.className}`} key={bus.className}>
+                <path className={`industrial-bus industrial-bus--${bus.className}`} d={`M760 ${bus.y} H1404`} />
+                {bus.className === 'energy' ? <path className="industrial-bus industrial-bus--energy industrial-bus--energy-return" d={`M760 ${bus.y + 7} H1404`} /> : null}
+                <path className={`industrial-signal industrial-signal--${bus.className}`} d={`M760 ${bus.y} H1404`} />
+                <circle className="industrial-bus-terminal" cx="760" cy={bus.y} r="3.5" />
+                <circle className="industrial-bus-terminal" cx="1404" cy={bus.y} r="3.5" />
+                <text className="industrial-bus-label" x="914" y={bus.y - 9}>{bus.label}</text>
+              </g>
+            ))}
+          </g>
+
+          <g className="industrial-drops">
+            <path className="industrial-drop industrial-drop--events" d="M850 178 V250" />
+            <path className="industrial-drop industrial-drop--energy" d="M990 248 V330" />
+            <path className="industrial-drop industrial-drop--field" d="M900 450 V564" />
+            <path className="industrial-drop industrial-drop--services" d="M1368 90 V520" />
+            <path className="industrial-drop industrial-drop--control" d="M860 250 V520" />
+          </g>
+
+          <g className="industrial-hub" transform="translate(860 390)">
+            <circle className="industrial-hub-ring" r="58" />
+            <circle className="industrial-hub-ring industrial-hub-ring--inner" r="38" />
+            <Cpu className="industrial-hub-icon" x="-15" y="-15" width="30" height="30" strokeWidth="1.6" />
+            <text className="industrial-hub-label" x="0" y="82">EDGE CONTROL</text>
+          </g>
+
+          {nodes.map((node) => {
+            const Icon = node.icon
+            return (
+              <g className={`industrial-node industrial-node--${node.key}`} key={node.key} transform={`translate(${node.x} ${node.y})`}>
+                <circle className="industrial-node-ring" r="28" />
+                <Icon className="industrial-node-icon" x="-12" y="-12" width="24" height="24" strokeWidth="1.7" />
+                <circle className="industrial-node-status" cx="21" cy="-20" r="4" />
+                <text className="industrial-node-label" x="0" y="48">{node.label}</text>
+                <text className="industrial-node-protocol" x="0" y="64">{node.protocol}</text>
+              </g>
+            )
+          })}
+        </g>
+      </svg>
+    </div>
+  )
+}
+
+const asturiasMapPath = 'M2.60 24.20 L6.40 24.50 L7.03 22.75 L7.50 20.90 L9.22 18.90 L11.60 16.90 L13.98 15.88 L16.70 15.80 L19.00 16.25 L21.10 16.60 L23.15 16.25 L25.10 16.40 L26.97 17.23 L28.80 17.50 L30.32 17.07 L31.50 16.40 L33.15 17.45 L35.10 17.60 L37.75 17.27 L40.10 16.10 L42.28 16.98 L44.20 18.20 L46.05 17.15 L47.60 16.00 L48.75 15.20 L50.00 14.80 L51.05 13.13 L51.80 11.30 L53.07 12.32 L54.10 13.80 L55.42 15.90 L57.20 17.00 L59.25 16.82 L61.20 16.70 L63.13 17.45 L65.10 17.90 L67.40 17.75 L69.30 18.30 L70.92 19.27 L72.20 20.80 L74.63 21.18 L76.90 21.70 L79.25 21.85 L81.70 22.30 L84.52 23.20 L87.20 24.10 L90.45 25.10 L93.60 26.10 L95.95 26.45 L98.20 26.10 L98.38 27.35 L97.70 28.70 L98.07 30.18 L97.40 31.80 L95.70 31.70 L94.40 32.40 L93.50 35.03 L91.60 36.30 L89.67 37.10 L88.30 38.90 L86.30 40.27 L83.50 41.00 L82.00 39.67 L80.50 38.90 L78.58 39.50 L76.80 40.70 L74.40 42.05 L71.80 42.70 L69.93 42.10 L68.10 41.70 L66.95 43.68 L65.70 45.60 L63.73 45.70 L61.80 45.80 L60.75 47.65 L59.40 48.80 L57.28 48.88 L55.30 48.70 L54.13 47.13 L52.80 45.80 L51.10 45.20 L49.60 44.40 L48.35 42.95 L47.20 42.00 L45.80 43.17 L44.20 45.10 L42.88 44.17 L41.70 43.60 L40.27 45.10 L38.80 45.80 L37.00 44.65 L35.20 43.80 L33.60 45.50 L31.60 46.60 L30.55 45.52 L29.40 45.10 L27.83 47.03 L25.90 48.20 L23.75 48.90 L21.50 49.00 L19.60 49.52 L17.50 49.10 L15.85 49.28 L14.30 48.20 L13.47 46.08 L12.40 43.70 L11.60 42.08 L10.40 41.00 L9.72 39.60 L10.10 37.80 L12.13 36.57 L13.80 34.90 L14.85 33.47 L14.80 32.20 L13.83 31.30 L12.90 30.80 L11.63 32.75 L10.00 33.80 L8.47 31.98 L7.90 30.10 L7.63 28.70 L6.40 27.70 L5.93 26.70 L5.90 25.70 L2.60 25.50 Z'
+const neighbouringTerritoriesPath = 'M105 25 L101 25 L98.20 26.10 L98.38 27.35 L97.70 28.70 L98.07 30.18 L97.40 31.80 L95.70 31.70 L94.40 32.40 L93.50 35.03 L91.60 36.30 L89.67 37.10 L88.30 38.90 L86.30 40.27 L83.50 41.00 L82.00 39.67 L80.50 38.90 L78.58 39.50 L76.80 40.70 L74.40 42.05 L71.80 42.70 L69.93 42.10 L68.10 41.70 L66.95 43.68 L65.70 45.60 L63.73 45.70 L61.80 45.80 L60.75 47.65 L59.40 48.80 L57.28 48.88 L55.30 48.70 L54.13 47.13 L52.80 45.80 L51.10 45.20 L49.60 44.40 L48.35 42.95 L47.20 42.00 L45.80 43.17 L44.20 45.10 L42.88 44.17 L41.70 43.60 L40.27 45.10 L38.80 45.80 L37.00 44.65 L35.20 43.80 L33.60 45.50 L31.60 46.60 L30.55 45.52 L29.40 45.10 L27.83 47.03 L25.90 48.20 L23.75 48.90 L21.50 49.00 L19.60 49.52 L17.50 49.10 L15.85 49.28 L14.30 48.20 L13.47 46.08 L12.40 43.70 L11.60 42.08 L10.40 41.00 L9.72 39.60 L10.10 37.80 L12.13 36.57 L13.80 34.90 L14.85 33.47 L14.80 32.20 L13.83 31.30 L12.90 30.80 L11.63 32.75 L10.00 33.80 L8.47 31.98 L7.90 30.10 L7.63 28.70 L6.40 27.70 L5.93 26.70 L5.90 25.70 L2.60 25.50 L2.60 24.20 L-1 18.40 L-4 17.50 L-4 70 L105 70 Z'
+const asturiasMapTransform = 'translate(-18 20) scale(12.5 11.2)'
+
+const asturiasCities = [
+  { kind: 'minor', name: 'Luarca', x: 188, y: 225 },
+  { kind: 'major', name: 'Avil\u00e9s', x: 493, y: 235 },
+  { kind: 'major', name: 'Gij\u00f3n', x: 700, y: 240 },
+  { kind: 'capital', name: 'Oviedo', x: 625, y: 350 },
+  { kind: 'minor', name: 'Ribadesella', x: 916, y: 272 },
+  { kind: 'minor', name: 'Llanes', x: 1048, y: 286 },
+] as const
+
+function ContactAtmScene({ locale }: { locale: Locale }) {
+  const labels = locale === 'es'
+    ? {
+        airport: 'Aeropuerto de Asturias',
+        central: 'CENTRO',
+        castile: 'CASTILLA Y LE\u00d3N',
+        east: 'ESTE',
+        galicia: 'GALICIA',
+        cantabria: 'CANTABRIA',
+        sea: 'Mar Cant\u00e1brico',
+        west: 'OESTE',
+      }
+    : {
+        airport: 'Asturias Airport',
+        central: 'CENTRAL',
+        castile: 'CASTILE AND LEON',
+        east: 'EAST',
+        galicia: 'GALICIA',
+        cantabria: 'CANTABRIA',
+        sea: 'Cantabrian Sea',
+        west: 'WEST',
+      }
+
+  return (
+    <div className="contact-atm-backdrop" aria-hidden="true">
+      <svg className="contact-atm-map" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="atm-land-gradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#3d6578" />
+            <stop offset="1" stopColor="#1c3c4d" />
+          </linearGradient>
+          <linearGradient id="atm-runway-gradient" x1="0" x2="1">
+            <stop offset="0" stopColor="#9edcff" />
+            <stop offset="0.5" stopColor="#ffffff" />
+            <stop offset="1" stopColor="#9edcff" />
+          </linearGradient>
+          <pattern id="atm-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M40 0 H0 V40" fill="none" stroke="currentColor" strokeWidth="0.7" />
+          </pattern>
+          <clipPath id="asturias-land-clip">
+            <path d={asturiasMapPath} transform={asturiasMapTransform} />
+          </clipPath>
+        </defs>
+
+        <rect className="atm-sea" x="0" y="0" width="1200" height="720" />
+        <rect className="atm-grid" x="0" y="0" width="1200" height="720" fill="url(#atm-grid)" />
+        <text className="atm-sea-label" x="76" y="116">{labels.sea}</text>
+
+        <g className="atm-neighbouring-land">
+          <path
+            className="atm-neighbour-land"
+            d={neighbouringTerritoriesPath}
+            transform={asturiasMapTransform}
+          />
+          <path className="atm-neighbour-boundary" d="M174 500 C128 552 104 624 94 720 M920 534 C1010 578 1052 640 1074 720" />
+          <path className="atm-neighbour-contour" d="M36 566 C210 530 320 626 480 594 S790 610 940 572 S1100 548 1200 566" />
+          <path className="atm-neighbour-contour" d="M12 638 C204 594 356 676 548 642 S826 668 1018 626" />
+          <text className="atm-neighbour-label" x="42" y="548">{labels.galicia}</text>
+          <text className="atm-neighbour-label" x="512" y="570">{labels.castile}</text>
+          <text className="atm-neighbour-label" x="1080" y="548">{labels.cantabria}</text>
+        </g>
+
+        <g className="atm-land-layer">
+          <path className="atm-region" d={asturiasMapPath} transform={asturiasMapTransform} />
+          <g className="atm-land-detail" clipPath="url(#asturias-land-clip)">
+            <path className="atm-terrain" d="M80 506 C220 442 338 466 468 418 S724 386 846 438 S1046 458 1164 392" />
+            <path className="atm-terrain" d="M58 548 C214 490 346 534 506 472 S790 444 930 490 S1080 492 1190 448" />
+            <path className="atm-terrain atm-terrain--ridge" d="M102 586 C234 520 382 570 540 520 S830 500 1018 548" />
+            <path className="atm-municipality-line" d="M270 200 L328 554 M418 188 L456 570 M566 170 L596 570 M720 208 L696 546 M860 240 L816 516 M1010 276 L944 486" />
+            <path className="atm-municipality-line" d="M96 354 C310 324 478 348 658 326 S986 304 1142 356" />
+          </g>
+          <path className="atm-coastline" d={asturiasMapPath} transform={asturiasMapTransform} />
+        </g>
+
+        <g className="atm-sectors">
+          <path className="atm-sector atm-sector--west" d="M106 214 L474 188 L520 432 L224 520 Z" />
+          <path className="atm-sector atm-sector--central" d="M420 166 L790 188 L804 482 L500 438 Z" />
+          <path className="atm-sector atm-sector--east" d="M744 184 L1148 242 L1060 532 L790 482 Z" />
+          <path className="atm-sector-activity atm-sector-activity--west atm-sector-activity--one" d="M106 214 L474 188 L520 432 L224 520 Z" />
+          <path className="atm-sector-activity atm-sector-activity--central atm-sector-activity--one" d="M420 166 L790 188 L804 482 L500 438 Z" />
+          <path className="atm-sector-activity atm-sector-activity--east atm-sector-activity--one" d="M744 184 L1148 242 L1060 532 L790 482 Z" />
+          <path className="atm-sector-activity atm-sector-activity--west atm-sector-activity--two" d="M106 214 L474 188 L520 432 L224 520 Z" />
+          <path className="atm-sector-activity atm-sector-activity--central atm-sector-activity--two" d="M420 166 L790 188 L804 482 L500 438 Z" />
+          <path className="atm-sector-activity atm-sector-activity--east atm-sector-activity--two" d="M744 184 L1148 242 L1060 532 L790 482 Z" />
+          <path className="atm-sector-activity atm-sector-activity--east atm-sector-activity--three" d="M744 184 L1148 242 L1060 532 L790 482 Z" />
+          <text className="atm-sector-label" x="260" y="468">{labels.west}</text>
+          <text className="atm-sector-label" x="610" y="468">{labels.central}</text>
+          <text className="atm-sector-label" x="914" y="472">{labels.east}</text>
+        </g>
+
+        <path className="atm-route" d="M-90 676 C236 568 420 438 650 330 S1036 174 1300 116" />
+        <path className="atm-route atm-route--secondary" d="M-80 138 C228 202 392 324 620 326 S958 250 1290 314" />
+        <path className="atm-route atm-route--secondary" d="M-92 760 C244 626 500 516 704 430 S1036 444 1300 598" />
+        <g className="atm-route-fixes">
+          <circle cx="236" cy="568" r="4" />
+          <circle cx="650" cy="330" r="4" />
+          <circle cx="958" cy="250" r="4" />
+          <circle cx="1036" cy="444" r="4" />
+        </g>
+
+        <g className="atm-ctr">
+          <circle className="atm-ctr-ring" cx="431" cy="250" r="104" />
+          <circle className="atm-ctr-ring atm-ctr-ring--inner" cx="431" cy="250" r="62" />
+          <path className="atm-approach-line" d="M245 190 L617 310" />
+          <text className="atm-ctr-label" x="363" y="140">LEAS / OVD</text>
+        </g>
+
+        <g className="atm-compass" transform="translate(1110 92)">
+          <circle r="28" />
+          <path d="M0 -22 L6 4 L0 0 L-6 4 Z" />
+          <text x="0" y="-34">N</text>
+        </g>
+
+        {asturiasCities.map((city) => (
+          <g className={`atm-city atm-city--${city.kind}`} key={city.name} transform={`translate(${city.x} ${city.y})`}>
+            <circle className="atm-city-ring" r={city.kind === 'capital' ? 8 : city.kind === 'major' ? 6 : 4} />
+            <circle className="atm-city-core" r={city.kind === 'capital' ? 3.4 : city.kind === 'major' ? 2.8 : 2.2} />
+            <text x="12" y="4">{city.name}</text>
+          </g>
+        ))}
+
+        <g className="atm-airport" transform="translate(431 250)">
+          <circle className="atm-airport-marker" r="34" />
+          <circle className="atm-airport-marker atm-airport-marker--outer" r="48" />
+          <g className="atm-runway" transform="rotate(18)">
+            <rect className="atm-runway-strip" x="-48" y="-5" width="96" height="10" rx="1" />
+            <line className="atm-runway-centerline" x1="-41" y1="0" x2="41" y2="0" />
+            <path className="atm-runway-threshold" d="M-43 -4 V4 M-39 -4 V4 M39 -4 V4 M43 -4 V4" />
+          </g>
+          <text className="atm-airport-code" x="-60" y="-12">OVD / LEAS</text>
+          <text className="atm-airport-name" x="-60" y="9">{labels.airport}</text>
+          <text className="atm-airport-runway" x="-60" y="28">RWY 11/29</text>
+        </g>
+
+        <g className="atm-plane atm-plane--one">
+          <path className="atm-plane-trail" d="M-126 -8 H-26" transform="rotate(-21)" />
+          <rect className="atm-plane-frame" x="-16" y="-24" width="32" height="32" />
+          <text className="atm-plane-symbol" x="0" y="-8">&#9992;</text>
+          <text className="atm-plane-id" x="28" y="-30">IBE4026</text>
+          <text className="atm-plane-meta" x="28" y="-15">FL340</text>
+          <text className="atm-plane-meta" x="28" y="-2">452 kt</text>
+        </g>
+        <g className="atm-plane atm-plane--two">
+          <path className="atm-plane-trail" d="M-126 -8 H-26" transform="rotate(4)" />
+          <rect className="atm-plane-frame" x="-16" y="-24" width="32" height="32" />
+          <text className="atm-plane-symbol" x="0" y="-8">&#9992;</text>
+          <text className="atm-plane-id" x="28" y="-30">RYR2931</text>
+          <text className="atm-plane-meta" x="28" y="-15">FL280</text>
+          <text className="atm-plane-meta" x="28" y="-2">416 kt</text>
+        </g>
+        <g className="atm-plane atm-plane--three">
+          <path className="atm-plane-trail" d="M-126 -8 H-26" transform="rotate(-8)" />
+          <rect className="atm-plane-frame" x="-16" y="-24" width="32" height="32" />
+          <text className="atm-plane-symbol" x="0" y="-8">&#9992;</text>
+          <text className="atm-plane-id" x="28" y="-30">AEA095</text>
+          <text className="atm-plane-meta" x="28" y="-15">FL300</text>
+          <text className="atm-plane-meta" x="28" y="-2">438 kt</text>
+        </g>
+
+      </svg>
+    </div>
+  )
+}
+
 function getInitialSection(): SectionId {
   const hash = window.location.hash.replace('#', '') as SectionId
   return sectionIds.includes(hash) ? hash : 'profile'
@@ -384,7 +678,6 @@ function App() {
   const [navSquishing, setNavSquishing] = useState(false)
   const [showQR, setShowQR] = useState(false)
   const [qrDataUrl, setQrDataUrl] = useState('')
-  const [qrDismissed, setQrDismissed] = useState(() => window.localStorage.getItem('qrDismissed') === 'true')
   const [expandedMobileSections, setExpandedMobileSections] = useState<Record<string, boolean>>({})
   const [activeProjectCategory, setActiveProjectCategory] = useState<ProjectCategory>('professional')
   const [showAllCerts, setShowAllCerts] = useState(false)
@@ -513,16 +806,7 @@ function App() {
       .then(setQrDataUrl)
   }, [])
 
-  useEffect(() => {
-    if (qrDismissed) return
-
-    const timer = setTimeout(() => setShowQR(true), 60_000)
-    return () => clearTimeout(timer)
-  }, [qrDismissed])
-
   const dismissQR = () => {
-    window.localStorage.setItem('qrDismissed', 'true')
-    setQrDismissed(true)
     setShowQR(false)
   }
 
@@ -540,6 +824,7 @@ function App() {
     const syncFromHash = () => {
       const hash = window.location.hash.replace('#', '') as SectionId
       if (sectionIds.includes(hash)) {
+        window.scrollTo({ top: 0, behavior: 'auto' })
         setActiveSection(hash)
       }
     }
@@ -569,6 +854,19 @@ function App() {
 
     updateIndicator()
 
+    if (window.matchMedia('(max-width: 960px)').matches) {
+      const navElement = navRef.current
+      const tabElement = tabRefs.current.get(activeSection)
+
+      if (navElement && tabElement) {
+        const targetScrollLeft = tabElement.offsetLeft - (navElement.clientWidth - tabElement.offsetWidth) / 2
+        navElement.scrollTo({
+          left: Math.max(0, targetScrollLeft),
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        })
+      }
+    }
+
     const resizeObserver = new ResizeObserver(updateIndicator)
     if (navRef.current) {
       resizeObserver.observe(navRef.current)
@@ -583,7 +881,14 @@ function App() {
   }, [activeSection, locale])
 
   const selectSection = (section: SectionId) => {
-    if (section === activeSection) return
+    if (section === activeSection) {
+      window.scrollTo({
+        top: 0,
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      })
+      return
+    }
+    window.scrollTo({ top: 0, behavior: 'auto' })
     const epoch = ++squishEpochRef.current
     setActiveSection(section)
     setNavSquishing(true)
@@ -759,8 +1064,9 @@ function App() {
             role="tabpanel"
           >
             <div className="hero-section">
+              <IndustrialHeroScene locale={locale} />
               <div className="hero-copy">
-                <h1 id="hero-title">{profile.hero.title[locale]}</h1>
+                <AnimatedHeroTitle key={locale} text={profile.hero.title[locale]} />
                 <p className="role-line">
                   {profile.hero.role[locale].split('\n').map((line, index) => (
                     <span className={`role-line-part role-line-part--${index + 1}`} key={line}>
@@ -1197,104 +1503,41 @@ function App() {
 
         {activeSection === 'contact' ? (
           <section aria-labelledby="tab-contact" className="panel-shell contact-panel" id="panel-contact" role="tabpanel">
-            <div className="contact-atm-backdrop" aria-hidden="true">
-              <svg className="contact-atm-map" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid slice">
-                <rect className="atm-sea" x="0" y="-180" width="1200" height="900" />
-                <rect className="atm-neighbour" x="0" y="360" width="1200" height="360" />
-                <svg className="atm-region-svg" x="0" y="0" width="1200" height="720" viewBox="0 0 100 100" preserveAspectRatio="none">
-                  <polygon
-                    className="atm-region"
-                    points="99.87,40.80 94.53,40.20 84.40,35.60 80.13,35.60 77.07,33.80 73.60,34.60 70.53,29.80 68.27,30.20 66.40,28.40 61.73,29.00 58.53,28.00 57.33,29.40 55.73,29.20 56.27,27.00 53.33,26.00 52.40,22.60 50.67,21.80 50.13,20.20 49.33,22.20 47.33,23.00 45.87,26.40 42.93,25.40 42.53,26.80 40.13,28.20 38.53,27.00 37.20,27.60 37.07,26.20 36.67,27.00 35.20,25.20 31.07,28.60 29.20,27.40 28.13,28.40 26.53,27.00 26.27,28.60 21.87,28.40 20.80,26.80 17.20,28.20 15.47,26.80 13.73,28.20 8.67,26.60 7.60,28.20 5.73,28.20 4.93,34.40 2.53,38.20 0.27,38.00 0.00,40.60 2.00,42.60 1.87,45.60 2.93,47.80 4.40,47.80 4.40,52.40 7.87,55.60 7.47,58.40 8.40,60.80 10.93,59.20 11.47,57.20 13.20,59.60 13.20,61.60 10.00,65.20 9.07,64.40 6.93,69.80 8.13,71.80 8.53,68.40 10.13,72.00 11.47,72.00 12.93,74.40 12.80,77.40 15.07,78.60 15.20,80.20 17.20,77.40 23.87,77.80 28.00,75.80 28.00,73.80 26.67,73.80 26.27,72.00 28.40,72.00 29.33,68.40 30.80,66.80 31.87,68.60 33.47,68.40 35.73,70.40 36.13,67.60 37.47,67.40 39.47,69.40 40.67,68.60 41.20,65.40 43.47,67.00 44.67,66.00 45.73,69.60 47.47,71.80 51.60,74.00 53.07,73.40 53.60,69.80 55.60,66.80 60.80,69.60 63.20,69.40 63.73,67.00 66.93,67.40 67.87,63.80 71.07,65.20 76.00,62.40 77.60,63.40 78.93,57.20 81.73,57.80 85.07,52.80 86.67,54.00 87.87,57.40 91.20,57.00 92.27,51.00 95.33,50.60 96.40,48.00 98.93,50.40 99.60,49.40 98.93,43.80"
-                  />
-                  <polygon
-                    className="atm-neighbour-territory"
-                    points="0,38.20 0,100 15.20,100 17.20,77.40 15.20,80.20 15.07,78.60 12.80,77.40 12.93,74.40 11.47,72.00 10.13,72.00 8.53,68.40 8.13,71.80 6.93,69.80 9.07,64.40 10.00,65.20 13.20,61.60 13.20,59.60 11.47,57.20 10.93,59.20 8.40,60.80 7.47,58.40 7.87,55.60 4.40,52.40 4.40,47.80 2.93,47.80 1.87,45.60 2.00,42.60 0.00,40.60"
-                  />
-                </svg>
-                <path className="atm-route" d="M-80 690 L108 590 L318 418 L558 294 L828 238 L1280 142" />
-                <path className="atm-route atm-route--secondary" d="M-64 116 L184 238 L398 344 L640 356 L924 284 L1276 190" />
-                <path className="atm-route atm-route--secondary" d="M-88 788 L220 610 L470 466 L702 362 L1010 492 L1288 558" />
-                <g className="atm-sector-group">
-                  <path className="atm-sector" d="M294 178 L438 224 L392 382 L248 336 Z" />
-                  <path className="atm-sector-alert atm-sector-alert--ryr-left" d="M294 178 L438 224 L392 382 L248 336 Z" />
-                </g>
-                <g className="atm-sector-group atm-sector-group--wide">
-                  <path className="atm-sector atm-sector--wide" d="M640 198 L818 252 L778 456 L590 392 Z" />
-                  <path className="atm-sector-alert atm-sector-alert--ryr-wide" d="M640 198 L818 252 L778 456 L590 392 Z" />
-                  <path className="atm-sector-alert atm-sector-alert--ibe-wide" d="M640 198 L818 252 L778 456 L590 392 Z" />
-                </g>
-                <g className="atm-sector-group atm-sector-group--soft">
-                  <path className="atm-sector atm-sector--soft" d="M872 328 L1078 354 L1030 540 L850 508 Z" />
-                </g>
-                <circle className="atm-ring" cx="562" cy="352" r="128" />
-                <circle className="atm-ring atm-ring--small" cx="858" cy="282" r="82" />
-
-                <g className="atm-city atm-city--oviedo">
-                  <circle cx="586" cy="330" r="6" />
-                  <text x="600" y="334">Oviedo</text>
-                </g>
-                <g className="atm-city atm-city--gijon">
-                  <circle cx="674" cy="218" r="6" />
-                  <text x="688" y="222">Gijón</text>
-                </g>
-                <g className="atm-city atm-city--aviles">
-                  <circle cx="548" cy="210" r="6" />
-                  <text x="562" y="214">Avilés</text>
-                </g>
-
-                <g className="atm-airport" transform="translate(344 226)">
-                  <circle className="atm-airport-marker" cx="0" cy="0" r="12" />
-                  <path className="atm-airport-icon" d="M-6 -8 H6 L4.5 -3 H-4.5 Z M-3 -3 L-6 9 H6 L3 -3 M-5 4 H5 M-4.5 9 H4.5" />
-                  <text x="18" y="4">Aeropuerto de Asturias</text>
-                </g>
-
-                <g className="atm-plane atm-plane--one">
-                  <path className="atm-plane-trail" d="M-126 -8 H-26" transform="rotate(-21)" />
-                  <rect className="atm-plane-frame" x="-16" y="-24" width="32" height="32" />
-                  <text className="atm-plane-symbol" x="0" y="-8">&#9992;</text>
-                  <text className="atm-plane-id" x="28" y="-30">IBE4026</text>
-                  <text className="atm-plane-meta" x="28" y="-15">FL340</text>
-                  <text className="atm-plane-meta" x="28" y="-2">452 kt</text>
-                </g>
-                <g className="atm-plane atm-plane--two">
-                  <path className="atm-plane-trail" d="M-126 -8 H-26" transform="rotate(4)" />
-                  <rect className="atm-plane-frame" x="-16" y="-24" width="32" height="32" />
-                  <text className="atm-plane-symbol" x="0" y="-8">&#9992;</text>
-                  <text className="atm-plane-id" x="28" y="-30">RYR2931</text>
-                  <text className="atm-plane-meta" x="28" y="-15">FL280</text>
-                  <text className="atm-plane-meta" x="28" y="-2">416 kt</text>
-                </g>
-                <g className="atm-plane atm-plane--three">
-                  <path className="atm-plane-trail" d="M-126 -8 H-26" transform="rotate(-8)" />
-                  <rect className="atm-plane-frame" x="-16" y="-24" width="32" height="32" />
-                  <text className="atm-plane-symbol" x="0" y="-8">&#9992;</text>
-                  <text className="atm-plane-id" x="28" y="-30">AEA095</text>
-                  <text className="atm-plane-meta" x="28" y="-15">FL300</text>
-                  <text className="atm-plane-meta" x="28" y="-2">438 kt</text>
-                </g>
-              </svg>
-            </div>
+            <ContactAtmScene locale={locale} />
             <div className="contact-section">
               <h2>{profile.contact.title[locale]}</h2>
               <p>{profile.contact.text[locale]}</p>
               <div className="contact-actions">
                 <a className="primary-link contact-link" href={profile.links.linkedin} target="_blank" rel="noreferrer">
                   <ExternalLink size={18} aria-hidden="true" />
-                  <span>{profile.contact.action[locale]}</span>
-                  <ArrowUpRight size={16} aria-hidden="true" />
+                  <span>LinkedIn</span>
                 </a>
                 <a className="contact-alt-link" href={`${import.meta.env.BASE_URL}cv.pdf`} download>
                   <Download size={18} aria-hidden="true" />
-                  <span>{locale === 'es' ? 'Descargar CV' : 'Download CV'}</span>
+                  <span>CV</span>
                 </a>
+                <button
+                  className="contact-alt-link"
+                  type="button"
+                  aria-label={locale === 'es' ? 'Guardar contacto' : 'Save contact'}
+                  onClick={() => setShowQR(true)}
+                >
+                  <QrCode size={18} aria-hidden="true" />
+                  <span>{locale === 'es' ? 'Contacto' : 'Contact'}</span>
+                </button>
               </div>
             </div>
           </section>
         ) : null}
       </main>
 
-      {showQR && qrDataUrl && !qrDismissed ? (
-        <button className="qr-card" type="button" aria-label="Dismiss contact QR code" onClick={dismissQR}>
+      {showQR && qrDataUrl ? (
+        <button
+          className="qr-card"
+          type="button"
+          aria-label={locale === 'es' ? 'Cerrar codigo QR de contacto' : 'Close contact QR code'}
+          onClick={dismissQR}
+        >
           <img src={qrDataUrl} alt="Contact QR" className="qr-image" />
         </button>
       ) : null}
