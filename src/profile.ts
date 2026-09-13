@@ -956,6 +956,37 @@ export const profile = {
   personalProjects: [
     {
       title: {
+        es: 'MetaFPV · Simulador FPV de Oviedo',
+        en: 'MetaFPV · Oviedo FPV Simulator',
+      },
+      summary: {
+        es: 'Simulador de drones FPV para Windows desarrollado con Unity 6, con una recreación de 16 km² de Oviedo construida a partir de datos geográficos abiertos.',
+        en: 'FPV drone simulator for Windows built with Unity 6, featuring a 16 km² recreation of Oviedo generated from open geospatial data.',
+      },
+      details: [
+        {
+          es: 'Integra Catastro, OpenStreetMap, PNOA, LiDAR y cartografía del Principado de Asturias para generar terreno real, más de 30.000 partes de edificios, vegetación y elementos urbanos.',
+          en: 'It combines Cadastre, OpenStreetMap, PNOA, LiDAR and Principality of Asturias mapping data to generate real terrain, more than 30,000 building parts, vegetation and urban elements.',
+        },
+        {
+          es: 'El escenario funciona offline y utiliza sectorización, niveles de detalle y agrupación de geometría para mantener la fluidez del vuelo.',
+          en: 'The scenario works offline and uses spatial partitioning, levels of detail and geometry batching to maintain smooth flight performance.',
+        },
+      ],
+      link: 'https://www.linkedin.com/feed/update/urn:li:activity:7504164159354408960/',
+      image: `${B}projects/meta-fpv-oviedo-poster.jpg`,
+      imageCredit: {
+        title: 'MetaFPV sobrevolando Oviedo',
+        author: 'Guillermo Sierra-Maíllo',
+        license: 'Vídeo propio',
+        sourceUrl: 'https://www.linkedin.com/feed/update/urn:li:activity:7504164159354408960/',
+      },
+      previewVideo: `${B}projects/meta-fpv-oviedo.mp4`,
+      visual: 'air-traffic',
+      tags: ['Unity 6', 'FPV', 'Simulation', 'Open data', 'GIS', 'LiDAR'],
+    },
+    {
+      title: {
         es: 'HigIA',
         en: 'HigIA',
       },
