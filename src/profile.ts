@@ -140,6 +140,51 @@ const projectImages = {
       sourceUrl: 'https://www.hisparob.es/',
     },
   },
+  fiveGEve: {
+    image: `${B}projects/5g-eve-edge-control.jpg`,
+    imageCredit: {
+      title: 'Three men working on a cell tower',
+      author: 'Olgierd',
+      license: 'CC BY 2.0',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Three_men_working_on_a_cell_tower_(50136658687).jpg',
+    },
+  },
+  qu4lity: {
+    image: `${B}projects/qu4lity-distributed-agv.jpg`,
+    imageCredit: {
+      title: 'AGV - Automated Guided Vehicle',
+      author: 'Marta Veverica',
+      license: 'CC BY-SA 4.0',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:AGV_-_Automated_Guided_Vehicle.jpg',
+    },
+  },
+  ingenious: {
+    image: `${B}projects/ingenious-robot-arm.jpg`,
+    imageCredit: {
+      title: 'Robotic Arm Polishing Guitars at Martin Guitar Factory',
+      author: 'Henrysz',
+      license: 'CC BY 4.0',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Robotic_Arm_Polishing_Guitars_at_Martin_Guitar_Factory.jpg',
+    },
+  },
+  fiveGInduce: {
+    image: `${B}projects/5g-induce-logistics-agv.jpg`,
+    imageCredit: {
+      title: 'Jungheinrich ERC 213a 217a Automated Guided Vehicle',
+      author: 'Marc Auledas Noguera',
+      license: 'CC BY 4.0',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:Jungheinrich_ERC_213a_217a_Automated_Guided_Vehicle.jpg',
+    },
+  },
+  fiveGGrowth: {
+    image: `${B}projects/5g-growth-metrology.jpg`,
+    imageCredit: {
+      title: 'A Cylindrical Coordinate Measuring Machine Variant, the Optical Camshaft Gauge',
+      author: 'Turbonut',
+      license: 'CC BY-SA 4.0',
+      sourceUrl: 'https://commons.wikimedia.org/wiki/File:A_Cylindrical_Coordinate_Measuring_Machine_Variant,_the_Optical_Camshaft_Gauge.jpg',
+    },
+  },
   collaborate: {
     image: 'https://cordis.europa.eu/docs/results/h2020/820/820767_PS/20210526-090600.jpg',
     imageCredit: {
@@ -268,12 +313,12 @@ export const profile = {
       en: 'Industrial and automatic electronics engineering',
     },
     title: {
-      es: 'Construyo sistemas industriales robustos entre software, hardware y operación.',
-      en: 'I build robust industrial systems between software, hardware and operations.',
+      es: 'Ingeniería de software y sistemas industriales.',
+      en: 'Software engineering for industrial systems.',
     },
     role: {
-      es: 'Robotics · Critical Systems · Full-Stack Development · Real-Time Systems\nGrado en Ingeniería Electrónica Industrial y Automática\nMáster en Dirección de Proyectos',
-      en: 'Robotics · Critical Systems · Full-Stack Development · Real-Time Systems\nBachelor of Industrial Electronics and Automatic Engineering\nMaster in Project Management',
+      es: 'Robótica · Energía · Sistemas críticos · Tiempo real',
+      en: 'Robotics · Energy · Critical systems · Real time',
     },
     summary: {
       es: 'Más de seis años desarrollando soluciones software y hardware para robótica móvil, automatización industrial, sistemas embebidos, energía, ferroviario y gestión de tráfico aéreo.',
@@ -725,6 +770,7 @@ export const profile = {
   skillGroups: [
     {
       title: { es: 'Software y backend', en: 'Software and backend' },
+      context: { es: 'Minsait: Go, C++, gRPC, Protobuf y REST en módulos de operación energética AOM, EMS y DERMS - Indra: Ada, C++, Java y servicios distribuidos para integrated Network Manager - ABB / ASTI: C++, Python y ROS en AGVs, AMRs y pilotos como GASBOT', en: 'Minsait: Go, C++, gRPC, Protobuf and REST in AOM, EMS and DERMS energy-operation modules - Indra: Ada, C++, Java and distributed services for integrated Network Manager - ABB / ASTI: C++, Python and ROS in AGVs, AMRs and pilots such as GASBOT' },
       skills: [
         { name: { es: 'C++', en: 'C++' }, level: 83 },
         { name: { es: 'Python', en: 'Python' }, level: 75 },
@@ -737,6 +783,7 @@ export const profile = {
     },
     {
       title: { es: 'Frontend y HMI', en: 'Frontend and HMI' },
+      context: { es: 'Minsait: HMIs de operación energética con Vue.js, Vuex y JavaScript, trabajando con telemetría, señales, alarmas y series temporales - Proyectos personales: React en HigIA, TypeScript y Tauri en Local DNA Viewer, y Next.js en Open Market Terminal', en: 'Minsait: Energy-operation HMIs with Vue.js, Vuex and JavaScript, working with telemetry, signals, alarms and time series - Personal projects: React in HigIA, TypeScript and Tauri in Local DNA Viewer, and Next.js in Open Market Terminal' },
       skills: [
         { name: { es: 'Vue.js / Vuex', en: 'Vue.js / Vuex' }, level: 79 },
         { name: { es: 'HTML5 / CSS3', en: 'HTML5 / CSS3' }, level: 75 },
@@ -748,6 +795,7 @@ export const profile = {
     },
     {
       title: { es: 'Cloud y DevOps', en: 'Cloud and DevOps' },
+      context: { es: 'Minsait: Despliegues con Docker, Kubernetes y AWS; integración de NATS, Redis, PostgreSQL y MinIO en plataformas energéticas - Indra: Docker, Bash y entornos Unix/Linux para componentes de gestión de tráfico aéreo', en: 'Minsait: Deployments with Docker, Kubernetes and AWS; integration of NATS, Redis, PostgreSQL and MinIO in energy platforms - Indra: Docker, Bash and Unix/Linux environments for air-traffic-management components' },
       skills: [
         { name: { es: 'Docker', en: 'Docker' }, level: 77 },
         { name: { es: 'Kubernetes', en: 'Kubernetes' }, level: 71 },
@@ -760,6 +808,7 @@ export const profile = {
     },
     {
       title: { es: 'Robótica e industria', en: 'Robotics and industry' },
+      context: { es: 'ABB / ASTI: Programación de AGVs y AMRs con ROS y software propietario, PLCs en CODESYS, robots Yaskawa y comunicaciones OPC-UA, CANopen, TCP/IP y UDP - 5G EVE: Control remoto de Easybot mediante PLC virtual y procesamiento Edge/MEC - QU4LITY: Sincronización distribuida de AGVs con IEC 61499 - iNGENIOUS y 5G-INDUCE: Colaboración AGV-robot, teleoperación y logística industrial conectada - Otros proyectos: GASBOT, Safe-AGV, 5G Growth, CoLLaboratE y BOOST 4.0', en: 'ABB / ASTI: AGV and AMR programming with ROS and proprietary software, PLCs in CODESYS, Yaskawa robots and OPC-UA, CANopen, TCP/IP and UDP communications - 5G EVE: Remote Easybot control using a virtual PLC and Edge/MEC processing - QU4LITY: Distributed AGV synchronisation with IEC 61499 - iNGENIOUS and 5G-INDUCE: AGV-robot collaboration, teleoperation and connected industrial logistics - Other projects: GASBOT, Safe-AGV, 5G Growth, CoLLaboratE and BOOST 4.0' },
       skills: [
         { name: { es: 'AGV / AMR', en: 'AGV / AMR' }, level: 85 },
         { name: { es: 'ROS', en: 'ROS' }, level: 55 },
@@ -767,10 +816,14 @@ export const profile = {
         { name: { es: 'Robots Yaskawa', en: 'Yaskawa robots' }, level: 55 },
         { name: { es: 'Gemelos digitales', en: 'Digital twins' }, level: 35 },
         { name: { es: 'IoT industrial', en: 'Industrial IoT' }, level: 77 },
+        { name: { es: '5G / Edge / MEC', en: '5G / Edge / MEC' }, level: 65 },
+        { name: { es: 'IEC 61499', en: 'IEC 61499' }, level: 45 },
+        { name: { es: 'Control distribuido', en: 'Distributed control' }, level: 60 },
       ],
     },
     {
       title: { es: 'Sistemas críticos y energía', en: 'Critical systems and energy' },
+      context: { es: 'Minsait: Sistemas en tiempo real para AOM, EMS, DERMS y DERConnect, además de pasarelas SCADA e ICCP con soporte 24/7 - Proyectos 5G: Lazos de control remoto de baja latencia, vídeo en tiempo real y procesamiento Edge en 5G EVE, iNGENIOUS y 5G-INDUCE - Indra: Integrated Network Manager para EUROCONTROL - Capgemini: Componentes C/C++ y pruebas gTest en señalización ferroviaria', en: 'Minsait: Real-time systems for AOM, EMS, DERMS and DERConnect, plus SCADA and ICCP gateways with 24/7 support - 5G projects: Low-latency remote-control loops, real-time video and Edge processing in 5G EVE, iNGENIOUS and 5G-INDUCE - Indra: Integrated Network Manager for EUROCONTROL - Capgemini: C/C++ components and gTest validation in railway signalling' },
       skills: [
         { name: { es: 'Sistemas en tiempo real', en: 'Real-time systems' }, level: 81 },
         { name: { es: 'Smart grids', en: 'Smart grids' }, level: 79 },
@@ -782,13 +835,14 @@ export const profile = {
     },
     {
       title: { es: 'Idiomas', en: 'Languages' },
+      context: { es: 'Español: Nativo - Inglés: Usado en el itinerario bilingüe de ingeniería y en equipos técnicos internacionales - Italiano: Desarrollado durante el Erasmus en la Università di Bologna', en: 'Spanish: Native - English: Used throughout the bilingual engineering degree and in international technical teams - Italian: Developed during the Erasmus programme at the University of Bologna' },
       skills: [
         { name: { es: 'Español', en: 'Spanish' }, level: 100 },
         { name: { es: 'Inglés', en: 'English' }, level: 81 },
         { name: { es: 'Italiano', en: 'Italian' }, level: 33 },
       ],
     },
-  ] satisfies { title: TextBlock; skills: SkillItem[] }[],
+  ] satisfies { title: TextBlock; context?: TextBlock; skills: SkillItem[] }[],
   professionalProjects: [
     {
       title: {
@@ -809,6 +863,7 @@ export const profile = {
       ...projectImages.aom,
       visual: 'energy-grid',
       tags: ['Smart grid', 'AOM', 'Real-time'],
+      previewVideo: 'https://cdn.pixabay.com/video/2025/03/24/267120_large.mp4',
     },
     {
       title: {
@@ -911,6 +966,126 @@ export const profile = {
       ...projectImages.safeAgv,
       visual: 'agv-safety',
       tags: ['AGV', 'Safety', 'RF'],
+    },
+    {
+      title: {
+        es: '5G EVE · Control de AGV desde el Edge',
+        en: '5G EVE · Edge-controlled AGV',
+      },
+      summary: {
+        es: 'Virtualización del control de un ASTI Easybot: sensores y vídeo viajaban por 5G hasta un PLC virtual y aplicaciones de procesamiento desplegadas en Edge/MEC.',
+        en: 'Virtualised control of an ASTI Easybot: sensor data and video travelled over 5G to a virtual PLC and processing applications deployed at the Edge/MEC.',
+      },
+      details: [
+        {
+          es: 'El lazo remoto gestionaba seguimiento de ruta, reacción a marcas y evitación de obstáculos, con reconocimiento visual en tiempo real para identificar la causa de una parada.',
+          en: 'The remote loop handled route following, marker reactions and obstacle avoidance, with real-time computer vision to identify what caused a stop.',
+        },
+        {
+          es: 'Objetivo técnico: validar un control centralizable de baja latencia que redujese hardware embarcado y simplificase mantenimiento y actualizaciones.',
+          en: 'Technical goal: validate low-latency, centralisable control that reduced onboard hardware and simplified maintenance and updates.',
+        },
+      ],
+      link: 'https://standards-tracker.5g-ppp.eu/node/323',
+      ...projectImages.fiveGEve,
+      visual: 'mobile-robot',
+      tags: ['5G', 'Edge / MEC', 'Virtual PLC'],
+    },
+    {
+      title: {
+        es: 'QU4LITY · Control distribuido de AGVs',
+        en: 'QU4LITY · Distributed AGV control',
+      },
+      summary: {
+        es: 'Sustitución de una Traffic Box central por control y sincronización distribuidos mediante IEC 61499 para coordinar AGVs en cruces industriales.',
+        en: 'Replacement of a central Traffic Box with IEC 61499 distributed control and synchronisation to coordinate AGVs at industrial intersections.',
+      },
+      details: [
+        {
+          es: 'La prueba empleaba dos AGVs sobre un cruce de cinta magnética, cada uno con una Raspberry Pi ejecutando EcoRT y bloques de control IEC 61499.',
+          en: 'The trial used two AGVs on a magnetic-tape intersection, each carrying a Raspberry Pi running EcoRT and IEC 61499 control blocks.',
+        },
+        {
+          es: 'Arquitectura preparada para comunicación directa entre AGVs y con infraestructura como semáforos, ascensores o maquinaria.',
+          en: 'Architecture designed for direct AGV-to-AGV communication and interaction with infrastructure such as traffic lights, lifts or machinery.',
+        },
+      ],
+      link: 'https://qu4lity-project.eu/wp-content/uploads/2022/06/D4.4-Distributed-Communication-and-Control-Infrastructure-Final-Version.pdf',
+      ...projectImages.qu4lity,
+      visual: 'industrial-data',
+      tags: ['IEC 61499', 'Distributed control', 'AGV'],
+    },
+    {
+      title: {
+        es: 'iNGENIOUS · Robótica industrial sobre 5G',
+        en: 'iNGENIOUS · Industrial robotics over 5G',
+      },
+      summary: {
+        es: 'Casos de uso 5G/MEC para colaboración entre AGV y brazo robótico, y para teleoperación inmersiva de vehículos mediante realidad mixta y guantes hápticos.',
+        en: '5G/MEC use cases for AGV and robotic-arm collaboration, plus immersive vehicle teleoperation using mixed reality and haptic gloves.',
+      },
+      details: [
+        {
+          es: 'Un sensor 3D permitía localizar el AGV respecto al robot y coordinar una operación de fabricación con procesamiento remoto de los datos.',
+          en: 'A 3D sensor located the AGV relative to the robot and coordinated a manufacturing operation with remote data processing.',
+        },
+        {
+          es: 'La interfaz de teleoperación combinaba vídeo en tiempo real, avisos hápticos ante riesgos y órdenes gestuales de navegación autónoma.',
+          en: 'The teleoperation interface combined real-time video, haptic risk warnings and gesture-based autonomous-navigation commands.',
+        },
+      ],
+      link: 'https://ngiot.eu/asti-mobile-robotics/',
+      ...projectImages.ingenious,
+      visual: 'cobot',
+      tags: ['5G / MEC', 'Robotics', 'Mixed reality'],
+    },
+    {
+      title: {
+        es: '5G-INDUCE · Logística industrial conectada',
+        en: '5G-INDUCE · Connected industrial logistics',
+      },
+      summary: {
+        es: 'Desarrollo y prototipado de un AGV industrial conectado por 5G para gestión remota de flota, telemetría, vídeo y procesamiento Edge.',
+        en: 'Development and prototyping of a 5G-connected industrial AGV for remote fleet management, telemetry, video and Edge processing.',
+      },
+      details: [
+        {
+          es: 'El vehículo intercambiaba estado, velocidad, corriente y batería con el sistema de coordinación y recibía órdenes remotas de control.',
+          en: 'The vehicle exchanged status, speed, current and battery data with the coordination system and received remote control commands.',
+        },
+        {
+          es: 'Trabajo en la etapa de desarrollo del caso de uso; las validaciones finales posteriores se realizaron en la fábrica de Ford Valencia.',
+          en: 'Work took place during the use-case development stage; later final validations were carried out at the Ford Valencia factory.',
+        },
+      ],
+      link: 'https://www.pressebox.de/inaktiv/insystems-automation-gmbh/ASTI-Mobile-Robotics-unterstuetzt-Ford-beim-Umbau-ihres-Motorenwerkes-auf-5G-Technologie/boxid/1066047',
+      ...projectImages.fiveGInduce,
+      visual: 'agv-safety',
+      tags: ['5G', 'AGV', 'Industrial logistics'],
+    },
+    {
+      title: {
+        es: '5G Growth · Metrología conectada con AGVs',
+        en: '5G Growth · AGV-enabled connected metrology',
+      },
+      summary: {
+        es: 'Proyecto europeo Horizon 2020 para validar tecnologías 5G en Industria 4.0 y otros sectores verticales, con participación de ASTI Mobile Robotics.',
+        en: 'European Horizon 2020 project validating 5G technologies for Industry 4.0 and other vertical sectors, with the participation of ASTI Mobile Robotics.',
+      },
+      details: [
+        {
+          es: 'Aplicación de metrología habilitada por 5G con AGVs para integrar robótica móvil en procesos flexibles de control de calidad conectados de forma remota.',
+          en: 'A 5G-enabled metrology application involving AGVs, integrating mobile robotics into flexible, remotely connected quality-control processes.',
+        },
+        {
+          es: 'Exploración de conectividad industrial de baja latencia para coordinar movilidad, medición e intercambio remoto de información.',
+          en: 'Exploration of low-latency industrial connectivity to coordinate mobility, measurement and remote information exchange.',
+        },
+      ],
+      link: 'https://cordis.europa.eu/project/id/856709',
+      ...projectImages.fiveGGrowth,
+      visual: 'industrial-data',
+      tags: ['Horizon 2020', '5G', 'Metrology'],
     },
     {
       title: {

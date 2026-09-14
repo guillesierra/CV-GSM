@@ -49,10 +49,19 @@ import {
 } from 'lucide-react'
 import QRCode from 'qrcode'
 import './App.css'
+import './visual-system.css'
 import { type ExperienceItem, type Locale, type ProjectItem, type ProjectVisualKind, type SectionId, profile } from './profile'
 
 const sectionIds: SectionId[] = ['profile', 'experience', 'skills', 'projects', 'education', 'contact']
 const eagerPreviewVideo = (profile.professionalProjects as ProjectItem[]).find((project) => project.previewVideo)?.previewVideo
+const featuredCertificationTitles = new Set([
+  'Kubernetes sencillo para desarrolladores',
+  'Practical Test Driven Development for Java Programmers',
+  'Model Context Protocol: Advanced Topics',
+  'Curso DASA DevOps Fundamentals',
+  'CMake, Tests and Tooling for C/C++ Projects',
+  'Inside ATM [GEN-ATM-INTRO]',
+])
 
 type Theme = 'light' | 'dark'
 type ProjectCategory = 'professional' | 'personal' | 'academic'
@@ -382,103 +391,26 @@ function AnimatedHeroTitle({ text }: { text: string }) {
 }
 
 function IndustrialHeroScene({ locale }: { locale: Locale }) {
-  const labels = locale === 'es'
-    ? {
-        atm: 'TR\u00c1FICO A\u00c9REO',
-        energy: 'ENERG\u00cdA',
-        eventsBus: 'BUS DE EVENTOS',
-        fieldBus: 'BUS DE CAMPO',
-        realTime: 'TIEMPO REAL',
-        robotics: 'ROB\u00d3TICA',
-        serviceBus: 'BUS DE SERVICIOS',
-        telemetry: 'NATS \u00b7 TELEMETR\u00cdA',
-      }
-    : {
-        atm: 'AIR TRAFFIC',
-        energy: 'ENERGY',
-        eventsBus: 'EVENT BUS',
-        fieldBus: 'FIELD BUS',
-        realTime: 'REAL-TIME',
-        robotics: 'ROBOTICS',
-        serviceBus: 'SERVICE BUS',
-        telemetry: 'NATS \u00b7 TELEMETRY',
-      }
-
-  const nodes = [
-    { icon: TimerReset, key: 'real-time', label: labels.realTime, protocol: labels.telemetry, x: 850, y: 150 },
-    { icon: UtilityPole, key: 'energy', label: labels.energy, protocol: 'ICCP \u00b7 SCADA', x: 990, y: 220 },
-    { icon: Bot, key: 'robotics', label: labels.robotics, protocol: 'OPC-UA \u00b7 CANopen', x: 900, y: 592 },
-    { icon: TowerControl, key: 'atm', label: labels.atm, protocol: 'gRPC \u00b7 AMQP', x: 1368, y: 62 },
-  ]
-
-  const buses = [
-    { className: 'events', label: labels.eventsBus, y: 250 },
-    { className: 'energy', label: 'ICCP / SCADA', y: 330 },
-    { className: 'field', label: labels.fieldBus, y: 450 },
-    { className: 'services', label: labels.serviceBus, y: 520 },
+  const domains = [
+    { icon: Bot, title: { es: 'Robótica industrial', en: 'Industrial robotics' }, detail: 'AGV / AMR · ROS · PLC' },
+    { icon: UtilityPole, title: { es: 'Energía y control', en: 'Energy and control' }, detail: 'SCADA · EMS · DERMS' },
+    { icon: TowerControl, title: { es: 'Sistemas críticos', en: 'Critical systems' }, detail: 'ATM · C++ · gRPC' },
   ]
 
   return (
-    <div className="industrial-hero-scene" aria-hidden="true">
-      <svg className="industrial-hero-svg" viewBox="0 0 1440 760" preserveAspectRatio="xMidYMid slice" focusable="false">
-        <defs>
-          <pattern id="hero-grid-pattern" width="48" height="48" patternUnits="userSpaceOnUse">
-            <path d="M48 0 H0 V48" className="industrial-grid-line" />
-          </pattern>
-          <linearGradient id="hero-signal-gradient" x1="0" x2="1">
-            <stop offset="0" stopColor="var(--accent-secondary)" />
-            <stop offset="1" stopColor="var(--accent)" />
-          </linearGradient>
-        </defs>
-
-        <rect className="industrial-grid" width="1440" height="760" fill="url(#hero-grid-pattern)" />
-        <g className="industrial-network">
-          <g className="industrial-buses">
-            {buses.map((bus) => (
-              <g className={`industrial-bus-group industrial-bus-group--${bus.className}`} key={bus.className}>
-                <path className={`industrial-bus industrial-bus--${bus.className}`} d={`M760 ${bus.y} H1404`} />
-                {bus.className === 'energy' ? <path className="industrial-bus industrial-bus--energy industrial-bus--energy-return" d={`M760 ${bus.y + 7} H1404`} /> : null}
-                <path className={`industrial-signal industrial-signal--${bus.className}`} d={`M760 ${bus.y} H1404`} />
-                <circle className="industrial-bus-terminal" cx="760" cy={bus.y} r="3.5" />
-                <circle className="industrial-bus-terminal" cx="1404" cy={bus.y} r="3.5" />
-                <text className="industrial-bus-label" x="914" y={bus.y - 9}>{bus.label}</text>
-              </g>
-            ))}
-          </g>
-
-          <g className="industrial-drops">
-            <path className="industrial-drop industrial-drop--events" d="M850 178 V250" />
-            <path className="industrial-drop industrial-drop--energy" d="M990 248 V330" />
-            <path className="industrial-drop industrial-drop--field" d="M900 450 V564" />
-            <path className="industrial-drop industrial-drop--services" d="M1368 90 V520" />
-            <path className="industrial-drop industrial-drop--control" d="M860 250 V520" />
-          </g>
-
-          <g className="industrial-hub" transform="translate(860 390)">
-            <circle className="industrial-hub-ring" r="58" />
-            <circle className="industrial-hub-ring industrial-hub-ring--inner" r="38" />
-            <Cpu className="industrial-hub-icon" x="-15" y="-15" width="30" height="30" strokeWidth="1.6" />
-            <text className="industrial-hub-label" x="0" y="82">EDGE CONTROL</text>
-          </g>
-
-          {nodes.map((node) => {
-            const Icon = node.icon
-            return (
-              <g className={`industrial-node industrial-node--${node.key}`} key={node.key} transform={`translate(${node.x} ${node.y})`}>
-                <circle className="industrial-node-ring" r="28" />
-                <Icon className="industrial-node-icon" x="-12" y="-12" width="24" height="24" strokeWidth="1.7" />
-                <circle className="industrial-node-status" cx="21" cy="-20" r="4" />
-                <text className="industrial-node-label" x="0" y="48">{node.label}</text>
-                <text className="industrial-node-protocol" x="0" y="64">{node.protocol}</text>
-              </g>
-            )
-          })}
-        </g>
-      </svg>
-    </div>
+    <section className="domain-strip" aria-label={locale === 'es' ? 'Ámbitos de trabajo' : 'Fields of work'}>
+      {domains.map(({ icon: Icon, title, detail }) => (
+        <div className="domain-item" key={title.en}>
+          <Icon size={22} aria-hidden="true" />
+          <div>
+            <h2>{title[locale]}</h2>
+            <p>{detail}</p>
+          </div>
+        </div>
+      ))}
+    </section>
   )
 }
-
 const asturiasMapPath = 'M2.60 24.20 L6.40 24.50 L7.03 22.75 L7.50 20.90 L9.22 18.90 L11.60 16.90 L13.98 15.88 L16.70 15.80 L19.00 16.25 L21.10 16.60 L23.15 16.25 L25.10 16.40 L26.97 17.23 L28.80 17.50 L30.32 17.07 L31.50 16.40 L33.15 17.45 L35.10 17.60 L37.75 17.27 L40.10 16.10 L42.28 16.98 L44.20 18.20 L46.05 17.15 L47.60 16.00 L48.75 15.20 L50.00 14.80 L51.05 13.13 L51.80 11.30 L53.07 12.32 L54.10 13.80 L55.42 15.90 L57.20 17.00 L59.25 16.82 L61.20 16.70 L63.13 17.45 L65.10 17.90 L67.40 17.75 L69.30 18.30 L70.92 19.27 L72.20 20.80 L74.63 21.18 L76.90 21.70 L79.25 21.85 L81.70 22.30 L84.52 23.20 L87.20 24.10 L90.45 25.10 L93.60 26.10 L95.95 26.45 L98.20 26.10 L98.38 27.35 L97.70 28.70 L98.07 30.18 L97.40 31.80 L95.70 31.70 L94.40 32.40 L93.50 35.03 L91.60 36.30 L89.67 37.10 L88.30 38.90 L86.30 40.27 L83.50 41.00 L82.00 39.67 L80.50 38.90 L78.58 39.50 L76.80 40.70 L74.40 42.05 L71.80 42.70 L69.93 42.10 L68.10 41.70 L66.95 43.68 L65.70 45.60 L63.73 45.70 L61.80 45.80 L60.75 47.65 L59.40 48.80 L57.28 48.88 L55.30 48.70 L54.13 47.13 L52.80 45.80 L51.10 45.20 L49.60 44.40 L48.35 42.95 L47.20 42.00 L45.80 43.17 L44.20 45.10 L42.88 44.17 L41.70 43.60 L40.27 45.10 L38.80 45.80 L37.00 44.65 L35.20 43.80 L33.60 45.50 L31.60 46.60 L30.55 45.52 L29.40 45.10 L27.83 47.03 L25.90 48.20 L23.75 48.90 L21.50 49.00 L19.60 49.52 L17.50 49.10 L15.85 49.28 L14.30 48.20 L13.47 46.08 L12.40 43.70 L11.60 42.08 L10.40 41.00 L9.72 39.60 L10.10 37.80 L12.13 36.57 L13.80 34.90 L14.85 33.47 L14.80 32.20 L13.83 31.30 L12.90 30.80 L11.63 32.75 L10.00 33.80 L8.47 31.98 L7.90 30.10 L7.63 28.70 L6.40 27.70 L5.93 26.70 L5.90 25.70 L2.60 25.50 Z'
 const neighbouringTerritoriesPath = 'M105 25 L101 25 L98.20 26.10 L98.38 27.35 L97.70 28.70 L98.07 30.18 L97.40 31.80 L95.70 31.70 L94.40 32.40 L93.50 35.03 L91.60 36.30 L89.67 37.10 L88.30 38.90 L86.30 40.27 L83.50 41.00 L82.00 39.67 L80.50 38.90 L78.58 39.50 L76.80 40.70 L74.40 42.05 L71.80 42.70 L69.93 42.10 L68.10 41.70 L66.95 43.68 L65.70 45.60 L63.73 45.70 L61.80 45.80 L60.75 47.65 L59.40 48.80 L57.28 48.88 L55.30 48.70 L54.13 47.13 L52.80 45.80 L51.10 45.20 L49.60 44.40 L48.35 42.95 L47.20 42.00 L45.80 43.17 L44.20 45.10 L42.88 44.17 L41.70 43.60 L40.27 45.10 L38.80 45.80 L37.00 44.65 L35.20 43.80 L33.60 45.50 L31.60 46.60 L30.55 45.52 L29.40 45.10 L27.83 47.03 L25.90 48.20 L23.75 48.90 L21.50 49.00 L19.60 49.52 L17.50 49.10 L15.85 49.28 L14.30 48.20 L13.47 46.08 L12.40 43.70 L11.60 42.08 L10.40 41.00 L9.72 39.60 L10.10 37.80 L12.13 36.57 L13.80 34.90 L14.85 33.47 L14.80 32.20 L13.83 31.30 L12.90 30.80 L11.63 32.75 L10.00 33.80 L8.47 31.98 L7.90 30.10 L7.63 28.70 L6.40 27.70 L5.93 26.70 L5.90 25.70 L2.60 25.50 L2.60 24.20 L-1 18.40 L-4 17.50 L-4 70 L105 70 Z'
 const asturiasMapTransform = 'translate(-18 20) scale(12.5 11.2)'
@@ -681,50 +613,13 @@ function App() {
   const [expandedMobileSections, setExpandedMobileSections] = useState<Record<string, boolean>>({})
   const [activeProjectCategory, setActiveProjectCategory] = useState<ProjectCategory>('professional')
   const [showAllCerts, setShowAllCerts] = useState(false)
+  const [showEarlierEducation, setShowEarlierEducation] = useState(false)
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({})
   const [collapsedExperienceCards, setCollapsedExperienceCards] = useState<Record<string, boolean>>({})
   const navRef = useRef<HTMLElement | null>(null)
   const tabRefs = useRef(new Map<SectionId, HTMLButtonElement>())
-  const terminalInputRef = useRef<HTMLInputElement | null>(null)
   const squishEpochRef = useRef(0)
   const nextLocale: Locale = locale === 'es' ? 'en' : 'es'
-
-  const [terminalPhase, setTerminalPhase] = useState<'typing' | 'output' | 'idle' | 'error'>('typing')
-  const [typedCommand, setTypedCommand] = useState('')
-  const [terminalInput, setTerminalInput] = useState('')
-  const [errorCommand, setErrorCommand] = useState('')
-  const [terminalStarted, setTerminalStarted] = useState(false)
-  const terminalRef = useRef<HTMLElement | null>(null)
-  const terminalStartedRef = useRef(false)
-
-  useEffect(() => {
-    if (activeSection !== 'profile') {
-      setTerminalStarted(false)
-      terminalStartedRef.current = false
-      return
-    }
-    setTerminalPhase('typing')
-    setTypedCommand('')
-    setTerminalInput('')
-    setErrorCommand('')
-    setTerminalStarted(false)
-    terminalStartedRef.current = false
-
-    const handleScroll = () => {
-      const el = terminalRef.current
-      if (!el || terminalStartedRef.current) return
-      const rect = el.getBoundingClientRect()
-      if (rect.top < window.innerHeight) {
-        terminalStartedRef.current = true
-        setTerminalStarted(true)
-        window.removeEventListener('scroll', handleScroll)
-      }
-    }
-
-    handleScroll()
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [activeSection])
 
   useEffect(() => {
     if (!eagerPreviewVideo) return
@@ -749,48 +644,6 @@ function App() {
       preloadVideo.remove()
     }
   }, [])
-
-  useEffect(() => {
-    if (terminalPhase !== 'typing' || !terminalStarted) return
-    const fullCommand = 'cat profile_summary.txt'
-    let i = 0
-    const interval = setInterval(() => {
-      if (i <= fullCommand.length) {
-        setTypedCommand(fullCommand.slice(0, i))
-        i++
-      } else {
-        clearInterval(interval)
-        setTimeout(() => setTerminalPhase('output'), 350)
-        setTimeout(() => {
-          setTerminalPhase('idle')
-          setTimeout(() => terminalInputRef.current?.focus({ preventScroll: true }), 60)
-        }, 550)
-      }
-    }, 55)
-    return () => clearInterval(interval)
-  }, [terminalPhase, terminalStarted])
-
-  const handleTerminalKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && terminalInput.trim()) {
-      setErrorCommand(terminalInput)
-      setTerminalInput('')
-      setTerminalPhase('error')
-      setTimeout(() => {
-        setTerminalPhase('idle')
-        setErrorCommand('')
-        setTimeout(() => terminalInputRef.current?.focus(), 60)
-      }, 3000)
-    }
-  }
-
-  const [skillsAnimated, setSkillsAnimated] = useState(false)
-
-  useEffect(() => {
-    if (activeSection === 'skills' && !skillsAnimated) {
-      const timer = setTimeout(() => setSkillsAnimated(true), 120)
-      return () => clearTimeout(timer)
-    }
-  }, [activeSection, skillsAnimated])
 
   useEffect(() => {
     const vCard = [
@@ -933,7 +786,7 @@ function App() {
     .map((visual) => professionalProjects.find((project) => project.visual === visual))
     .filter((project): project is ProjectItem => Boolean(project))
   const filteredProjects = {
-    professional: professionalProjects,
+    professional: professionalProjects.filter((project) => !featuredProjects.includes(project)),
     personal: personalProjects,
     academic: academicProjects,
   } satisfies Record<ProjectCategory, ProjectItem[]>
@@ -1064,8 +917,8 @@ function App() {
             role="tabpanel"
           >
             <div className="hero-section">
-              <IndustrialHeroScene locale={locale} />
               <div className="hero-copy">
+                <p className="hero-name">Guillermo Sierra-Maíllo</p>
                 <AnimatedHeroTitle key={locale} text={profile.hero.title[locale]} />
                 <p className="role-line">
                   {profile.hero.role[locale].split('\n').map((line, index) => (
@@ -1076,20 +929,19 @@ function App() {
                 </p>
                 <p className="hero-summary">{profile.hero.summary[locale]}</p>
                 <div className="hero-actions">
-                  <a className="primary-link" href={profile.links.linkedin} target="_blank" rel="noreferrer">
-                    <ExternalLink size={18} aria-hidden="true" />
-                    <span>{profile.hero.primaryAction[locale]}</span>
-                    <ArrowUpRight size={16} aria-hidden="true" />
+                  <button className="primary-link" type="button" onClick={() => selectSection('projects')}>
+                    <span>{profile.hero.secondaryAction[locale]}</span>
+                    <ArrowUpRight size={17} aria-hidden="true" />
+                  </button>
+                  <a className="secondary-link" href={`${import.meta.env.BASE_URL}cv.pdf`} download>
+                    <Download size={18} aria-hidden="true" />
+                    <span>{locale === 'es' ? 'Descargar CV' : 'Download CV'}</span>
                   </a>
                   <a className="secondary-link" href={profile.links.github} target="_blank" rel="noreferrer">
                     <Code2 size={18} aria-hidden="true" />
                     <span>{profile.hero.githubAction[locale]}</span>
                     <ArrowUpRight size={16} aria-hidden="true" />
                   </a>
-                  <button className="secondary-link" type="button" onClick={() => selectSection('projects')}>
-                    <ArrowDown size={17} aria-hidden="true" />
-                    <span>{profile.hero.secondaryAction[locale]}</span>
-                  </button>
                 </div>
               </div>
 
@@ -1107,65 +959,11 @@ function App() {
               </aside>
             </div>
 
-            <section className="terminal-window" aria-label="Terminal profile summary" ref={terminalRef}>
-              <div className="terminal-titlebar">
-                <span className="terminal-titlebar-dots">
-                  <span className="terminal-dot terminal-dot--close" />
-                  <span className="terminal-dot terminal-dot--minimize" />
-                  <span className="terminal-dot terminal-dot--maximize" />
-                </span>
-                <span className="terminal-title">gjsierra@ubuntu: ~</span>
-              </div>
-              <div className="terminal-body">
-                <p className="terminal-line">
-                  <span className="terminal-prompt">
-                    gjsierra@ubuntu:<span className="prompt-path">~</span>$
-                  </span>
-                  {' '}{typedCommand}
-                  {terminalPhase === 'typing' && <span className="terminal-cursor">█</span>}
-                </p>
-
-                {terminalPhase !== 'typing' && (
-                  <>
-                    <p className="terminal-line terminal-line--blank">&nbsp;</p>
-                    {profile.intro.paragraphs.flatMap((paragraph, i) => [
-                      <p key={`p-${i}`} className="terminal-output">{paragraph[locale]}</p>,
-                      i < profile.intro.paragraphs.length - 1 ? <p key={`b-${i}`} className="terminal-line terminal-line--blank">&nbsp;</p> : null,
-                    ]).filter(Boolean)}
-                  </>
-                )}
-
-                {terminalPhase === 'error' && (
-                  <>
-                    <p className="terminal-line terminal-line--blank">&nbsp;</p>
-                    <p className="terminal-line">
-                      <span className="terminal-prompt">
-                        gjsierra@ubuntu:<span className="prompt-path">~</span>$
-                      </span>
-                      {' '}{errorCommand}
-                    </p>
-                    <p className="terminal-output terminal-error">Segmentation fault (core dumped)</p>
-                  </>
-                )}
-
-                {(terminalPhase === 'idle' || terminalPhase === 'output' || terminalPhase === 'error') && (
-                  <p className="terminal-line terminal-input-line">
-                    <span className="terminal-prompt">
-                      gjsierra@ubuntu:<span className="prompt-path">~</span>$
-                    </span>
-                    {' '}
-                    <input
-                      ref={terminalInputRef}
-                      className="terminal-input"
-                      value={terminalInput}
-                      onChange={(e) => setTerminalInput(e.target.value)}
-                      onKeyDown={handleTerminalKeyDown}
-                      spellCheck={false}
-                      autoComplete="off"
-                      aria-label="Terminal input"
-                    />
-                  </p>
-                )}
+            <IndustrialHeroScene locale={locale} />
+            <section className="profile-summary" aria-labelledby="profile-summary-title">
+              <h2 id="profile-summary-title">{locale === 'es' ? 'Software, hardware y operación' : 'Software, hardware and operations'}</h2>
+              <div>
+                {profile.intro.paragraphs.map((paragraph) => <p key={paragraph.en}>{paragraph[locale]}</p>)}
               </div>
             </section>
           </section>
@@ -1186,7 +984,7 @@ function App() {
               {getExperienceDisplayItems(profile.experience).map((item) => {
                 const timelineYears = getTimelineYears(item, locale)
                 const experienceCardId = `${item.company}-${item.period.es}`
-                const isExperienceCollapsed = Boolean(collapsedExperienceCards[experienceCardId])
+                const isExperienceCollapsed = collapsedExperienceCards[experienceCardId] ?? true
 
                 return (
                   <div className="experience-row" key={experienceCardId}>
@@ -1214,12 +1012,17 @@ function App() {
                         type="button"
                         onClick={() => setCollapsedExperienceCards((current) => ({
                           ...current,
-                          [experienceCardId]: !current[experienceCardId],
+                          [experienceCardId]: !isExperienceCollapsed,
                         }))}
                       >
                         <ChevronDown size={18} aria-hidden="true" />
                       </button>
                     </div>
+                    {isExperienceCollapsed ? (
+                      <ul className="experience-highlights">
+                        {item.xyz.achievement.map((point) => <li key={point.en}>{point[locale]}</li>)}
+                      </ul>
+                    ) : null}
                     {!isExperienceCollapsed ? (
                       <>
                         {item.stack ? (
@@ -1287,40 +1090,31 @@ function App() {
               <h2>{profile.labels.skills[locale]}</h2>
             </div>
             <div className="skill-grid">
-              {profile.skillGroups.map((group) => {
-                let skillIdx = 0
-                return (
+              {profile.skillGroups.map((group) => (
                 <article className="skill-card" key={group.title[locale]}>
                   <h3>{group.title[locale]}</h3>
-                  <div className="skill-meter-list">
+                  <ul className="skill-list">
                     {group.skills.map((skill) => {
-                      const idx = skillIdx++
-                      const duration = 550 + (idx % 5) * 170 + (skill.level / 100) * 350
                       const SkillIcon = skillIconMap[skill.name.en] ?? Cpu
                       return (
-                      <div className="skill-meter" key={skill.name[locale]}>
-                        <div className="skill-meter-head">
+                      <li key={skill.name[locale]}>
                           <span className="skill-name">
                             <SkillIcon size={15} aria-hidden="true" />
                             <span>{skill.name[locale]}</span>
                           </span>
-                          <strong>{skillsAnimated ? `${skill.level}%` : '0%'}</strong>
-                        </div>
-                        <div className="skill-bar" aria-hidden="true">
-                          <span
-                            style={{
-                              '--skill-level': skillsAnimated ? `${skill.level}%` : '0%',
-                              transitionDuration: `${duration}ms`,
-                            } as CSSProperties}
-                          />
-                        </div>
-                      </div>
+                      </li>
                       )
                     })}
-                  </div>
+                  </ul>
+                  {group.context ? (
+                    <div className="skill-context">
+                      {group.context[locale].split(' - ').map((contextLine) => (
+                        <p key={contextLine}>{contextLine}</p>
+                      ))}
+                    </div>
+                  ) : null}
                 </article>
-                )
-              })}
+              ))}
             </div>
           </section>
         ) : null}
@@ -1370,7 +1164,7 @@ function App() {
                 <GraduationCap size={20} aria-hidden="true" />
                 <h2>{profile.labels.education[locale]}</h2>
               </div>
-              {profile.education.map((item) => (
+              {(showEarlierEducation ? profile.education : profile.education.slice(0, 2)).map((item) => (
                 <article className="education-block" key={item.degree.es}>
                   <div className="education-head">
                     {item.logos ? (
@@ -1418,15 +1212,26 @@ function App() {
                   ) : null}
                 </article>
               ))}
+              <button className="text-action education-more" type="button" aria-expanded={showEarlierEducation} onClick={() => setShowEarlierEducation((current) => !current)}>
+                {showEarlierEducation ? (locale === 'es' ? 'Ocultar formación anterior' : 'Hide earlier education') : (locale === 'es' ? 'Ver formación anterior' : 'View earlier education')}
+                <ChevronDown size={14} aria-hidden="true" />
+              </button>
             </div>
             <div>
               <div className="section-heading compact">
                 <GraduationCap size={20} aria-hidden="true" />
                 <h2>{profile.labels.certifications[locale]}</h2>
               </div>
+              <p className="certification-selection-note">
+                {locale === 'es'
+                  ? 'Selección por relevancia para el perfil, actualidad, variedad técnica y credencial verificable.'
+                  : 'Selected for profile relevance, recency, technical breadth and a verifiable credential.'}
+              </p>
 
               {(() => {
-                const certs = showAllCerts ? profile.certifications : profile.certifications.filter((c) => c.featured)
+                const certs = showAllCerts
+                  ? profile.certifications
+                  : profile.certifications.filter((certification) => featuredCertificationTitles.has(certification.title))
                 const groups = certs.reduce((acc, cert) => {
                   const key = cert.issuer
                   if (!acc[key]) acc[key] = []
@@ -1511,6 +1316,10 @@ function App() {
                 <a className="primary-link contact-link" href={profile.links.linkedin} target="_blank" rel="noreferrer">
                   <ExternalLink size={18} aria-hidden="true" />
                   <span>LinkedIn</span>
+                </a>
+                <a className="contact-alt-link" href={profile.links.github} target="_blank" rel="noreferrer">
+                  <Code2 size={18} aria-hidden="true" />
+                  <span>GitHub</span>
                 </a>
                 <a className="contact-alt-link" href={`${import.meta.env.BASE_URL}cv.pdf`} download>
                   <Download size={18} aria-hidden="true" />

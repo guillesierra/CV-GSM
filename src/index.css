@@ -1,6 +1,6 @@
 :root {
-  --bg: #ffffff;
-  --surface: #f5f5f7;
+  --bg: #fafafa;
+  --surface: #f1f2f3;
   --surface-elevated: #ffffff;
   --wash: #f5f5f7;
   --glass: rgba(255, 255, 255, 0.72);
@@ -9,9 +9,9 @@
   --muted: #6e6e73;
   --line: #d2d2d7;
   --line-strong: #b8b8bd;
-  --accent: #0071e3;
-  --accent-strong: #0071e3;
-  --accent-secondary: #00c7be;
+  --accent: #245b91;
+  --accent-strong: #1c4976;
+  --accent-secondary: var(--accent);
   --success: #34c759;
   --danger: #ff3b30;
   --warning: #ffcc00;
@@ -53,9 +53,9 @@
 }
 
 html[data-theme='dark'] {
-  --bg: #000000;
-  --surface: #1d1d1f;
-  --surface-elevated: #2c2c2e;
+  --bg: #141618;
+  --surface: #1c1f22;
+  --surface-elevated: #24282c;
   --wash: #1d1d1f;
   --glass: rgba(29, 29, 31, 0.72);
   --text: #f5f5f7;
@@ -63,9 +63,9 @@ html[data-theme='dark'] {
   --muted: #a1a1a6;
   --line: #424245;
   --line-strong: #55555a;
-  --accent: #2997ff;
-  --accent-strong: #2997ff;
-  --accent-secondary: #40cbe0;
+  --accent: #8bb6df;
+  --accent-strong: #a8cbed;
+  --accent-secondary: var(--accent);
   --focus: #2997ff;
   --shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
   color-scheme: dark;
@@ -84,7 +84,7 @@ body {
   background: var(--bg);
   color: var(--text);
   margin: 0;
-  min-width: 320px;
+  min-width: 0;
   transition:
     background-color 420ms ease,
     color 320ms ease;
